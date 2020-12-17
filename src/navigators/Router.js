@@ -1,30 +1,34 @@
 import * as React from 'react';
 
 import AnimatedTabBar, {
-  BubbleTabConfig,
+  BubbleTabBarItemConfig,
   TabsConfig,
 } from '@gorhom/animated-tabbar';
 import {
   ForgotPasswordScreen,
+  LoadingScreen,
   LoginScreen,
   RegisterScreen,
-  WelcomeScreen,
-} from '../screen/Auth';
-import {HomeScreen, HomeScreenDetail} from '../screen/Home';
+} from '../screens/Auth';
+import {HomeScreen, HomeScreenDetail} from '../screens/Home';
 import {Image, Platform} from 'react-native';
-import {SettingsScreen, SettingsScreenDetail} from '../screen/Settings';
+import {SettingsScreen, SettingsScreenDetail} from '../screens/Settings';
 
-import ChatScreen from '../screen/Chat';
-import DrawerScreen from '../screen/Drawer';
+// import {ChatsScreen} from '../screens/Chats';
+import {DrawerScreen} from '../screens/Drawer';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import IMAGE_NAME from '../assets/index';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import MapScreen from '../screen/Map';
+// import {MapScreen} from '../screens/Map';
 import {NavigationContainer} from '@react-navigation/native';
-import {NotificationsScreen} from '../screen/Notification';
+import {NotificationsScreen} from '../screens/Notifications';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
+import navigationRef from './NavigationServiceV5';
+import {useTranslation} from 'react-i18next';
 
-const tabs: TabsConfig<BubbleTabConfig> = {
+const tabs = {
   Home: {
     labelStyle: {
       color: '#5B37B7',
@@ -32,63 +36,22 @@ const tabs: TabsConfig<BubbleTabConfig> = {
       fontWeight: 'bold',
     },
     icon: {
-      component: (
-        <Ionicons
-          name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-          size={25}
-          color="#5B37B7"
-        />
+      component: (props) => (
+        <Ionicons name="calendar-outline" size={22} {...props} />
       ),
+      // component: (
+      //   <Ionicons
+      //     name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
+      //     size={25}
+      //     color="#5B37B7"
+      //   />
+      // ),
       activeColor: '#5B37B7',
       inactiveColor: '#000000',
     },
     background: {
       activeColor: '#dfd7f3',
       inactiveColor: 'rgba(223,215,243,0)',
-    },
-  },
-  Chat: {
-    labelStyle: {
-      color: '#2bc565',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    icon: {
-      component: (
-        <Ionicons
-          name={Platform.OS === 'ios' ? 'ios-chatbubbles' : 'md-chatbubbles'}
-          size={25}
-          color="#2bc565"
-        />
-      ),
-      activeColor: '#2bc565',
-      inactiveColor: '#000000',
-    },
-    background: {
-      activeColor: '#d4f3e0',
-      inactiveColor: 'rgba(207,235,239,0)',
-    },
-  },
-  Map: {
-    labelStyle: {
-      color: '#E90C43',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    icon: {
-      component: (
-        <Ionicons
-          name={Platform.OS === 'ios' ? 'ios-navigate' : 'md-navigate'}
-          size={25}
-          color="#E90C43"
-        />
-      ),
-      activeColor: '#E90C43',
-      inactiveColor: '#000000',
-    },
-    background: {
-      activeColor: '#faced9',
-      inactiveColor: 'rgba(207,235,239,0)',
     },
   },
   Settings: {
@@ -100,9 +63,9 @@ const tabs: TabsConfig<BubbleTabConfig> = {
     icon: {
       component: (
         <Ionicons
-          name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
+          name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
           size={25}
-          color="#1194AA"
+          color="#5B37B7"
         />
       ),
       activeColor: '#1194AA',
@@ -114,23 +77,16 @@ const tabs: TabsConfig<BubbleTabConfig> = {
     },
   },
 };
+
+/**Navigations**/
+const Drawer = createDrawerNavigator();
 const Tab = createBottomTabNavigator();
-
-const navOptionHandler = () => ({
-  headerShown: false,
-});
-
+// separate stack should be produced for each page
 const StackHome = createStackNavigator();
+const StackSetting = createStackNavigator();
+const StackApp = createStackNavigator();
 
-function HomeStack({navigation, route}) {
-  if (
-    route.state &&
-    route.state.routeNames[route.state.index] === 'HomeDetail'
-  ) {
-    navigation.setOptions({tabBarVisible: false});
-  } else {
-    navigation.setOptions({tabBarVisible: true});
-  }
+function HomeStack() {
   return (
     <StackHome.Navigator initialRouteName="Home">
       <StackHome.Screen
@@ -147,14 +103,8 @@ function HomeStack({navigation, route}) {
   );
 }
 
-const StackSetting = createStackNavigator();
-
-function SettingStack({navigation, route}) {
-  if (route.state && route.state.index > 0) {
-    navigation.setOptions({tabBarVisible: false});
-  } else {
-    navigation.setOptions({tabBarVisible: true});
-  }
+//create SettingStack
+function SettingStack() {
   return (
     <StackSetting.Navigator initialRouteName="Setting">
       <StackSetting.Screen
@@ -170,75 +120,23 @@ function SettingStack({navigation, route}) {
     </StackSetting.Navigator>
   );
 }
-const StackChat = createStackNavigator();
 
-function ChatStack({navigation, route}) {
-  if (route.state && route.state.index > 0) {
-    navigation.setOptions({tabBarVisible: false});
-  } else {
-    navigation.setOptions({tabBarVisible: true});
-  }
-  return (
-    <StackChat.Navigator initialRouteName="Chat">
-      <StackChat.Screen
-        name="Chat"
-        component={ChatScreen}
-        options={navOptionHandler}
-      />
-    </StackChat.Navigator>
-  );
-}
-const StackMap = createStackNavigator();
-
-function MapStack({navigation, route}) {
-  if (route.state && route.state.index > 0) {
-    navigation.setOptions({tabBarVisible: false});
-  } else {
-    navigation.setOptions({tabBarVisible: true});
-  }
-  return (
-    <StackMap.Navigator initialRouteName="Map">
-      <StackMap.Screen
-        name="Map"
-        component={MapScreen}
-        options={navOptionHandler}
-      />
-    </StackMap.Navigator>
-  );
-}
-
+/**Tab Navigator**/
 function TabNavigator(navigation) {
   return (
-    // <Tab.Navigator
-    //   screenOptions={({route}) => ({
-    //     tabBarIcon: ({focused, color, size}) => {
-    //       let iconName;
-    //       if (route.name === 'Home') {
-    //         iconName = focused ? 'ios-home' : 'md-home';
-    //       } else if (route.name === 'Settings') {
-    //         iconName = focused ? 'ios-settings' : 'md-settings';
-    //       }
-
-    //       // You can return any component that you like here!
-    //       return <Ionicons name={iconName} size={size} color={color} />;
-    //     },
-    //   })}
-    //   tabBarOptions={{
-    //     activeTintColor: '#ff4040',
-    //     inactiveTintColor: 'black',
-    //   }}>
     <Tab.Navigator
-      tabBar={(props) => <AnimatedTabBar tabs={tabs} {...props} />}>
+      tabBar={(props) => {
+        <AnimatedTabBar tabs={tabs} {...props} />;
+      }}>
       <Tab.Screen name="Home" component={HomeStack} />
-      <Tab.Screen name="Chat" component={ChatStack} />
-      <Tab.Screen name="Map" component={MapStack} />
+      {/* <Tab.Screen name="Chat" component={ChatStack} />
+      <Tab.Screen name="Map" component={MapStack} /> */}
       <Tab.Screen name="Settings" component={SettingStack} />
     </Tab.Navigator>
   );
 }
 
-const Drawer = createDrawerNavigator();
-
+/**Drawer Navigator**/
 function DrawerNavigator({navigation}) {
   return (
     <Drawer.Navigator
@@ -250,17 +148,16 @@ function DrawerNavigator({navigation}) {
   );
 }
 
-const StackApp = createStackNavigator();
+const navOptionHandler = () => ({
+  headerShown: false,
+});
+
+/**MAIN**/
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <StackApp.Navigator initialRouteName="HomeApp">
-        <StackApp.Screen
-          name="Welcome"
-          component={WelcomeScreen}
-          options={navOptionHandler}
-        />
+    <NavigationContainer ref={navigationRef}>
+      <StackApp.Navigator initialRouteName="Login">
         <StackApp.Screen
           name="HomeApp"
           component={DrawerNavigator}
@@ -276,11 +173,6 @@ export default function App() {
           component={RegisterScreen}
           options={navOptionHandler}
         />
-        {/* <StackApp.Screen
-          name="ForgotPassword"
-          component={ForgotPasswordScreen}
-          options={navOptionHandler}
-        /> */}
       </StackApp.Navigator>
     </NavigationContainer>
   );

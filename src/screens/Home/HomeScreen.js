@@ -1,7 +1,14 @@
+import {
+  Platform,
+  SafeAreaView,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {Component} from 'react';
-import {SafeAreaView, Text, TouchableOpacity, View} from 'react-native';
 
 import {CustomHeader} from '../../navigators/CustomHeader';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export class HomeScreen extends Component {
   render() {
@@ -15,6 +22,11 @@ export class HomeScreen extends Component {
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
           <View>
             <Text style={{fontSize: 20}}>Home!</Text>
+            <Ionicons
+              name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
+              size={25}
+              color="#5B37B7"
+            />
           </View>
           <TouchableOpacity
             style={{marginTop: 20}}

@@ -1,0 +1,19 @@
+{
+  "ok": "OK",
+  "cancel": "キャンセル",
+  "close": "閉じる",
+  "save": "閉じる",
+  "error": "エラー",
+
+  "Loading": "Loading",
+  "Register": "Register",
+  "Login": "Login",
+  "ForgotPassword": "ForgotPassword",
+  "Chats": "Chats",
+  "Settings": "Settings",
+  "SettingsDetail": "SettingsDetail",
+  "Home": "Home",
+  "HomeDetail": "HomeDetail",
+  "Notification": "Notification",
+  "Profile": "Profile"
+}

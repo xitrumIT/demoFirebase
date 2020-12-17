@@ -1,0 +1,19 @@
+{
+  "ok": "OK",
+  "cancel": "Huỷ",
+  "close": "Đóng",
+  "save": "Lưu",
+  "error": "Lỗi",
+
+  "Loading": "Đang tải",
+  "Register": "Đăng ký",
+  "Login": "Đăng nhập",
+  "ForgotPassword": "Quên mật khẩu",
+  "Chats": "Trò chuyện",
+  "Settings": "Cài đặt",
+  "SettingsDetail": "Cài đặt chi tiết",
+  "Home": "Trang chủ",
+  "HomeDetail": "Trang chủ chi tiết",
+  "Notification": "Thông báo",
+  "Profile": "Hồ sơ"
+}
