@@ -11,7 +11,7 @@ import {
   RegisterScreen,
 } from '../screens/Auth';
 import {HomeScreen, HomeScreenDetail} from '../screens/Home';
-import {Image, Platform} from 'react-native';
+import {Platform, View} from 'react-native';
 import {SettingsScreen, SettingsScreenDetail} from '../screens/Settings';
 
 // import {ChatsScreen} from '../screens/Chats';
@@ -24,59 +24,10 @@ import {NavigationContainer} from '@react-navigation/native';
 import {NotificationsScreen} from '../screens/Notifications';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import navigationRef from './NavigationServiceV5';
 import {useTranslation} from 'react-i18next';
-
-const tabs = {
-  Home: {
-    labelStyle: {
-      color: '#5B37B7',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    icon: {
-      component: (props) => (
-        <Ionicons name="calendar-outline" size={22} {...props} />
-      ),
-      // component: (
-      //   <Ionicons
-      //     name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-      //     size={25}
-      //     color="#5B37B7"
-      //   />
-      // ),
-      activeColor: '#5B37B7',
-      inactiveColor: '#000000',
-    },
-    background: {
-      activeColor: '#dfd7f3',
-      inactiveColor: 'rgba(223,215,243,0)',
-    },
-  },
-  Settings: {
-    labelStyle: {
-      color: '#1194AA',
-      fontSize: 20,
-      fontWeight: 'bold',
-    },
-    icon: {
-      component: (
-        <Ionicons
-          name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-          size={25}
-          color="#5B37B7"
-        />
-      ),
-      activeColor: '#1194AA',
-      inactiveColor: '#000000',
-    },
-    background: {
-      activeColor: '#cfebef',
-      inactiveColor: 'rgba(207,235,239,0)',
-    },
-  },
-};
 
 /**Navigations**/
 const Drawer = createDrawerNavigator();
@@ -125,13 +76,33 @@ function SettingStack() {
 function TabNavigator(navigation) {
   return (
     <Tab.Navigator
-      tabBar={(props) => {
-        <AnimatedTabBar tabs={tabs} {...props} />;
-      }}>
-      <Tab.Screen name="Home" component={HomeStack} />
+      initialRouteName="Home"
+      activeColor="#f06"
+      inactiveColor="#3e2465"
+      barStyle={{backgroundColor: '#694fad'}}>
+      <Tab.Screen
+        name="Home"
+        component={HomeStack}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color}) => (
+            <Ionicons name="home" color={color} size={26} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingStack}
+        options={{
+          tabBarLabel: 'Home',
+          tabBarIcon: ({color}) => (
+            <Ionicons name="settings" color={color} size={26} />
+          ),
+        }}
+      />
+
       {/* <Tab.Screen name="Chat" component={ChatStack} />
       <Tab.Screen name="Map" component={MapStack} /> */}
-      <Tab.Screen name="Settings" component={SettingStack} />
     </Tab.Navigator>
   );
 }
