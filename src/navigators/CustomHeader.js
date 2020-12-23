@@ -1,41 +1,47 @@
-import {Image, Text, TouchableOpacity, View} from 'react-native';
-import React, {Component} from 'react';
+import {Text, TouchableOpacity, View} from 'react-native';
 
-import IMAGE_NAME from '../assets/index';
+import {DrawerActions} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import React from 'react';
 
-export class CustomHeader extends Component {
-  render() {
-    let {navigation, isHome, title} = this.props;
-    return (
-      <View style={{flexDirection: 'row', height: 50}}>
-        <View style={{flex: 1, justifyContent: 'center'}}>
-          {isHome ? (
-            <TouchableOpacity onPress={() => navigation.openDrawer()}>
-              <Image
-                style={{width: 30, height: 30, marginLeft: 5}}
-                source={IMAGE_NAME.ICON_MENU}
-                resizeMode="contain"
-              />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity
-              style={{flexDirection: 'row', alignItems: 'center'}}
-              onPress={() => navigation.goBack()}>
-              <Image
-                style={{width: 25, height: 25, marginLeft: 5}}
-                source={IMAGE_NAME.ICON_BACK}
-                resizeMode="contain"
-              />
-              <Text>Back</Text>
-            </TouchableOpacity>
-          )}
-        </View>
-
-        <View style={{flex: 1.5, justifyContent: 'center'}}>
-          <Text style={{textAlign: 'center'}}>{title}</Text>
-        </View>
-        <View style={{flex: 1}} />
+const CustomHeader = ({isHome, navigation, title}) => {
+  return (
+    <View style={{flexDirection: 'row', height: 50}}>
+      <View style={{flex: 1, justifyContent: 'center'}}>
+        {isHome ? (
+          <TouchableOpacity
+            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
+            {/* <Ionicons
+              name="reorder-four-outline"
+              size={35}
+              style={{paddingRight: 5}}
+            /> */}
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity
+            style={{flexDirection: 'row', alignItems: 'center'}}
+            onPress={() => navigation.goBack()}>
+            <Ionicons
+              name="arrow-back-outline"
+              size={35}
+              style={{paddingRight: 5}}
+            />
+          </TouchableOpacity>
+        )}
       </View>
-    );
-  }
-}
+
+      <View style={{flex: 1.5, justifyContent: 'center'}}>
+        <Text
+          style={{
+            textAlign: 'center',
+            fontWeight: 'bold',
+            fontSize: 20,
+          }}>
+          {title}
+        </Text>
+      </View>
+      <View style={{flex: 1}} />
+    </View>
+  );
+};
+export default CustomHeader;

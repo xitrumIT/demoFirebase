@@ -15,7 +15,7 @@ i18n
   .init({
     resources: {
       vi: {
-        translation: require('./vi.json'),
+        translation: require('./vn.json'),
       },
       en: {
         translation: require('./en.json'),

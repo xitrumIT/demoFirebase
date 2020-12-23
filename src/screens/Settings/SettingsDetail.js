@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -8,28 +7,21 @@ import {
 } from 'react-native';
 
 import CustomHeader from '../../navigators/CustomHeader';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import i18n from 'locales';
 
-const HomeScreen = ({navigation}) => {
+const SettingsDetail = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <CustomHeader
-        title={i18n.t('Home')}
-        isHome={true}
-        navigation={navigation}
-      />
-      <View style={styles.viewHome}>
+      <CustomHeader title={i18n.t('SettingsDetail')} navigation={navigation} />
+      <View style={styles.viewContent}>
+        <Text style={styles.textContent}>Settings Detail!</Text>
         <TouchableOpacity
-          style={styles.touchView}
-          onPress={() => navigation.navigate('HomeDetail')}>
-          <Text style={styles.textHome}>Home!</Text>
-          <Ionicons
-            name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-            size={25}
-            color="#5B37B7"
-          />
+          style={styles.viewTouch}
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <Text>Back to Settings</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -40,19 +32,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  viewHome: {
+  viewContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  touchView: {
+  viewTouch: {
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  textHome: {
+
+  textContent: {
     fontSize: 20,
     color: 'red',
     fontWeight: 'bold',
     paddingBottom: 10,
   },
 });
-export default HomeScreen;
+export default SettingsDetail;

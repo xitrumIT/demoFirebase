@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  Platform,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -12,24 +11,16 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 import i18n from 'locales';
 
-const HomeScreen = ({navigation}) => {
+const CartScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <CustomHeader
-        title={i18n.t('Home')}
-        isHome={true}
-        navigation={navigation}
-      />
-      <View style={styles.viewHome}>
+      <CustomHeader title={i18n.t('Cart')} navigation={navigation} />
+      <View style={styles.viewContent}>
         <TouchableOpacity
-          style={styles.touchView}
-          onPress={() => navigation.navigate('HomeDetail')}>
-          <Text style={styles.textHome}>Home!</Text>
-          <Ionicons
-            name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
-            size={25}
-            color="#5B37B7"
-          />
+          onPress={() => navigation.navigate('HomeDetail')}
+          style={styles.viewTouch}>
+          <Text style={styles.textContent}>Cart Screen!</Text>
+          <Ionicons name="cart" size={25} color="#5B37B7" />
         </TouchableOpacity>
       </View>
     </View>
@@ -40,19 +31,20 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  viewHome: {
+  viewContent: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
   },
-  touchView: {
+  viewTouch: {
+    justifyContent: 'center',
     alignItems: 'center',
   },
-  textHome: {
+  textContent: {
     fontSize: 20,
     color: 'red',
     fontWeight: 'bold',
     paddingBottom: 10,
   },
 });
-export default HomeScreen;
+export default CartScreen;

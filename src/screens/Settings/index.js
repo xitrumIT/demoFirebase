@@ -1,2 +1,2 @@
 export * from './SettingsScreen';
-export * from './SettingsScreenDetail';
+export * from './SettingsDetail';

@@ -1,20 +1,33 @@
-import React, {Component} from 'react';
-import {SafeAreaView, Text, View} from 'react-native';
+import {Dimensions, StyleSheet, Text, View} from 'react-native';
 
-import {CustomHeader} from '../../navigators/CustomHeader';
+import CustomHeader from '../../navigators/CustomHeader';
+import React from 'react';
 
-export class LoadingScreen extends Component {
-  render() {
-    return (
-      <SafeAreaView style={{flex: 1}}>
-        <CustomHeader
-          title="LoadingScreen"
-          navigation={this.props.navigation}
-        />
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Text>LoadingScreen!</Text>
-        </View>
-      </SafeAreaView>
-    );
-  }
-}
+const LoadingScreen = ({navigation}) => {
+  return (
+    <View style={styles.container}>
+      <CustomHeader title="LoadingScreen" navigation={navigation} />
+      <View style={styles.viewContent}>
+        <Text style={styles.textContent}>LoadingScreen!</Text>
+      </View>
+    </View>
+  );
+};
+const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  viewContent: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  textContent: {
+    fontSize: 20,
+    color: 'red',
+    fontWeight: 'bold',
+    paddingBottom: 10,
+  },
+});
+export default LoadingScreen;

@@ -10,20 +10,17 @@ import CustomHeader from '../../navigators/CustomHeader';
 import React from 'react';
 import i18n from 'locales';
 
-const SettingsScreen = ({navigation}) => {
+const HomeDetail = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <CustomHeader title={i18n.t('Settings')} navigation={navigation} />
+      <CustomHeader title={i18n.t('HomeDetail')} navigation={navigation} />
       <View style={styles.viewContent}>
-        <View>
-          <Text style={styles.textContent}>Setting!</Text>
-        </View>
+        <Text style={styles.textContent}>This is Home Detail!</Text>
         <TouchableOpacity
-          style={styles.viewTouch}
-          onPress={() => navigation.navigate('SettingsDetail')}>
-          <View>
-            <Text>Go Setting Detail Screen!</Text>
-          </View>
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <Text>Back to Home</Text>
         </TouchableOpacity>
       </View>
     </View>
@@ -39,11 +36,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
   },
-  viewTouch: {
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-
   textContent: {
     fontSize: 20,
     color: 'red',
@@ -51,4 +43,4 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 });
-export default SettingsScreen;
+export default HomeDetail;
