@@ -17,7 +17,7 @@ const HomeScreen = ({navigation}) => {
     <View style={styles.container}>
       <CustomHeader
         title={i18n.t('Home')}
-        isHome={true}
+        isDrawer={true}
         navigation={navigation}
       />
       <View style={styles.viewHome}>

@@ -8,17 +8,16 @@ import {
 
 import React from 'react';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.viewContent}>
         <Text>Login Screen!</Text>
         <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('HomeApp')}>
+          onPress={() => navigation.navigate('RootStackScreen')}>
           <Text>Login</Text>
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => this.props.navigation.navigate('Register')}>
+        <TouchableOpacity onPress={() => navigation.navigate('Register')}>
           <Text>Register</Text>
         </TouchableOpacity>
       </View>

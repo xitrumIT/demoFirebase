@@ -1,47 +1,43 @@
-import {Text, TouchableOpacity, View} from 'react-native';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 
 import {DrawerActions} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import React from 'react';
 
-const CustomHeader = ({isHome, navigation, title}) => {
+const CustomHeader = ({isDrawer, navigation, title}) => {
   return (
-    <View style={{flexDirection: 'row', height: 50}}>
-      <View style={{flex: 1, justifyContent: 'center'}}>
-        {isHome ? (
+    <View style={styles.container}>
+      <View style={styles.viewDrawer}>
+        {isDrawer ? (
           <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
-            {/* <Ionicons
-              name="reorder-four-outline"
-              size={35}
-              style={{paddingRight: 5}}
-            /> */}
+            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+            <Ionicons name="reorder-four-outline" size={35} />
           </TouchableOpacity>
         ) : (
           <TouchableOpacity
-            style={{flexDirection: 'row', alignItems: 'center'}}
+            style={styles.viewIcon}
             onPress={() => navigation.goBack()}>
             <Ionicons
-              name="arrow-back-outline"
+              name={Platform.OS === 'ios' ? 'ios-arrow-back' : 'md-arrow-back'}
               size={35}
-              style={{paddingRight: 5}}
             />
           </TouchableOpacity>
         )}
       </View>
 
-      <View style={{flex: 1.5, justifyContent: 'center'}}>
-        <Text
-          style={{
-            textAlign: 'center',
-            fontWeight: 'bold',
-            fontSize: 20,
-          }}>
-          {title}
-        </Text>
+      <View style={styles.viewHeader}>
+        <Text style={styles.txtHeader}>{title}</Text>
       </View>
-      <View style={{flex: 1}} />
+      <View style={styles.viewDrawer} />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {flexDirection: 'row', justifyContent: 'space-around', height: 50},
+  viewDrawer: {flex: 1, justifyContent: 'center'},
+  viewIcon: {flexDirection: 'row', alignItems: 'center'},
+  viewHeader: {flex: 1.5, justifyContent: 'center'},
+  txtHeader: {textAlign: 'center', fontWeight: 'bold', fontSize: 20},
+});
 export default CustomHeader;

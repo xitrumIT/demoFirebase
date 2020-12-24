@@ -22,6 +22,8 @@ const IMAGE_NAME = {
   reg: require('./images/reg.png'),
   SHOW: require('./images/show.png'),
   STB: require('./images/stb.png'),
+  BGR_AVT: require('./images/bgr_avatar.jpg'),
+  AVATAR_VN: require('./images/Avatar_VN.jpg'),
 };
 
 export default IMAGE_NAME;

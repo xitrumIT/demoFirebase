@@ -1,29 +1,22 @@
-import * as React from 'react';
-
-import AnimatedTabBar, {
-  BubbleTabBarItemConfig,
-  TabsConfig,
-} from '@gorhom/animated-tabbar';
-// import {
-//   ForgotPasswordScreen,
-//   LoadingScreen,
-//   LoginScreen,
-//   RegisterScreen,
-// } from '../screens/Auth';
 import {Platform, Text} from 'react-native';
+import React, {useState} from 'react';
 
+import {AuthContext} from '../context/user';
 import CartScreen from '../screens/Cart/CartScreen';
 import ChatsScreen from '../screens/Chats/ChatsScreen';
 import DrawerScreen from '../screens/Drawer/DrawerScreen';
+import ForgotPasswordScreen from '../screens/Auth/ForgotPasswordScreen';
 import HomeDetail from '../screens/Home/HomeDetail';
 import HomeScreen from '../screens/Home/HomeScreen';
-import IMAGE_NAME from '../assets/index';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import LoginScreen from '../screens/Auth/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import NotificationsScreen from '../screens/Notifications/NotificationsScreen';
+import RegisterScreen from '../screens/Auth/RegisterScreen';
 import SCREEN_NAME from '../components/ScreenName';
 import SettingsDetail from '../screens/Settings/SettingsDetail';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
+import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
@@ -31,19 +24,104 @@ import {createStackNavigator} from '@react-navigation/stack';
 import i18n from 'locales';
 import navigationRef from './NavigationServiceV5';
 
-/**Navigations**/
-const Drawer = createDrawerNavigator();
-const Tab = createBottomTabNavigator();
-const Stack = createStackNavigator();
-
 /**MAIN**/
 const Main = () => {
   if (Text.defaultProps == null) {
     Text.defaultProps = {};
   }
   Text.defaultProps.allowFontScaling = false;
-  // const {t} = useTranslation();
 
+  const navOptionHandler = () => ({
+    headerShown: false,
+  });
+
+  //**Stack App**/
+  const StackHome = createStackNavigator();
+  const HomeStackScreen = ({navigation, route}) => {
+    return (
+      <StackHome.Navigator>
+        <StackHome.Screen
+          name="Home"
+          component={HomeScreen}
+          options={navOptionHandler}
+        />
+        <StackHome.Screen
+          name="HomeDetail"
+          component={HomeDetail}
+          options={navOptionHandler}
+        />
+      </StackHome.Navigator>
+    );
+  };
+
+  const StackSettings = createStackNavigator();
+  const SettingsStackScreen = ({navigation, route}) => {
+    return (
+      <StackSettings.Navigator>
+        <StackSettings.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={navOptionHandler}
+        />
+        <StackSettings.Screen
+          name="SettingsDetail"
+          component={SettingsDetail}
+          options={navOptionHandler}
+        />
+      </StackSettings.Navigator>
+    );
+  };
+
+  const StackChat = createStackNavigator();
+  const ChatsStackScreen = ({navigation, route}) => {
+    return (
+      <StackChat.Navigator>
+        <StackChat.Screen
+          name="Chats"
+          component={ChatsScreen}
+          options={navOptionHandler}
+        />
+      </StackChat.Navigator>
+    );
+  };
+
+  // const StackCart = createStackNavigator();
+  const CartStackScreen = ({navigation, route}) => {
+    return (
+      <RootStack.Navigator>
+        <RootStack.Screen
+          name="Cart"
+          component={CartScreen}
+          options={navOptionHandler}
+        />
+      </RootStack.Navigator>
+    );
+  };
+
+  //**Stack Auth **/
+  // const StackAuth = createStackNavigator();
+  // const AuthStackScreen = () => (
+  //   <StackAuth.Navigator>
+  //     <StackAuth.Screen
+  //       name="SignIn"
+  //       component={LoginScreen}
+  //       options={navOptionHandler}
+  //     />
+  //     <StackAuth.Screen
+  //       name="Register"
+  //       component={RegisterScreen}
+  //       options={navOptionHandler}
+  //     />
+  //     <StackAuth.Screen
+  //       name="ForgotPassword"
+  //       component={ForgotPasswordScreen}
+  //       options={navOptionHandler}
+  //     />
+  //   </StackAuth.Navigator>
+  // );
+
+  //**Tab**/
+  const Tab = createBottomTabNavigator();
   const TabNavigator = ({navigation}) => {
     return (
       <Tab.Navigator
@@ -53,46 +131,63 @@ const Main = () => {
           inactiveTintColor: '#3e2465',
           labelStyle: {fontSize: 12, fontWeight: 'bold'},
           // style: {height: 50},
-        }}
-        back>
+        }}>
         <Tab.Screen
           name={SCREEN_NAME.HOME_SCREEN}
-          component={HomeScreen}
+          component={HomeStackScreen}
           options={{
             tabBarLabel: i18n.t('Home'),
             tabBarIcon: ({color}) => (
-              <Ionicons name="home" color={color} size={22} />
+              <Ionicons
+                name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
+                color={color}
+                size={22}
+              />
             ),
           }}
         />
         <Tab.Screen
           name={SCREEN_NAME.CHATS_SCREEN}
-          component={ChatsScreen}
+          component={ChatsStackScreen}
           options={{
             tabBarLabel: i18n.t('Chats'),
             tabBarIcon: ({color}) => (
-              <Ionicons name="chatbubbles-outline" color={color} size={22} />
+              <Ionicons
+                name={
+                  Platform.OS === 'ios' ? 'ios-chatbubbles' : 'md-chatbubbles'
+                }
+                color={color}
+                size={22}
+              />
             ),
             tabBarBadge: 2,
           }}
         />
         <Tab.Screen
           name={SCREEN_NAME.CART_SCREEN}
-          component={CartScreen}
+          component={CartStackScreen}
           options={{
             tabBarLabel: i18n.t('Cart'),
             tabBarIcon: ({color}) => (
-              <Ionicons name="cart-outline" color={color} size={22} />
+              <Ionicons
+                name={Platform.OS === 'ios' ? 'ios-cart' : 'md-cart'}
+                color={color}
+                size={22}
+              />
             ),
           }}
         />
         <Tab.Screen
           name={SCREEN_NAME.SETTINGS_SCREEN}
-          component={SettingsScreen}
+          component={SettingsStackScreen}
           options={{
             tabBarLabel: i18n.t('Settings'),
             tabBarIcon: ({color}) => (
-              <Ionicons name="settings" color={color} size={22} />
+              <Ionicons
+                name={Platform.OS === 'ios' ? 'ios-settings' : 'md-settings'}
+                color={color}
+                size={22}
+              />
             ),
           }}
         />
@@ -100,53 +195,67 @@ const Main = () => {
     );
   };
 
-  /**Drawer Navigator**/
+  //**Drawer**/
+  const Drawer = createDrawerNavigator();
   const DrawerNavigator = ({navigation}) => {
     return (
       <Drawer.Navigator
-        initialRouteName="MenuTab"
+        initialRouteName={SCREEN_NAME.MENU_TAB}
         drawerContent={() => <DrawerScreen navigation={navigation} />}>
-        <Drawer.Screen name="MenuTab" component={TabNavigator} />
+        <Drawer.Screen name={SCREEN_NAME.MENU_TAB} component={TabNavigator} />
         {/* <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
       </Drawer.Navigator>
     );
   };
 
-  const navOptionHandler = () => ({
-    headerShown: false,
-  });
+  //**Root**/
+  const RootStack = createStackNavigator();
+  // const RootStackScreen = ({userToken}) => (
+  //   <RootStack.Navigator headerMode="none" initialRouteName="App">
+  //     {userToken ? (
+  //       <RootStack.Screen
+  //         name="App"
+  //         component={DrawerNavigator}
+  //         options={{
+  //           animationEnabled: false,
+  //         }}
+  //       />
+  //     ) : (
+  //       <RootStack.Screen
+  //         name="Auth"
+  //         component={AuthStackScreen}
+  //         options={{
+  //           animationEnabled: false,
+  //         }}
+  //       />
+  //     )}
+  //   </RootStack.Navigator>
+  // );
+  // const [isLoading, setIsLoading] = useState(true);
+  // const [user, setUser] = useState(null);
 
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setIsLoading(!isLoading);
+  //     setUser({});
+  //   }, 500);
+  // }, []);
   return (
     <NavigationContainer ref={navigationRef}>
-      <Stack.Navigator
+      <RootStack.Navigator
         initialRouteName={SCREEN_NAME.HOME_SCREEN}
         screenOptions={{gestureEnabled: false}}>
-        <Stack.Screen
+        <RootStack.Screen
           name={SCREEN_NAME.HOME_SCREEN}
-          component={TabNavigator}
-          options={navOptionHandler}
-        />
-        <Stack.Screen
-          name={SCREEN_NAME.DRAWER_SCREEN}
           component={DrawerNavigator}
           options={navOptionHandler}
         />
-        <Stack.Screen
-          name={SCREEN_NAME.SETTINGS_DETAIL}
-          component={SettingsDetail}
-          options={navOptionHandler}
-        />
-        <Stack.Screen
-          name={SCREEN_NAME.HOME_DETAIL}
-          component={HomeDetail}
-          options={navOptionHandler}
-        />
-        <Stack.Screen
+        <RootStack.Screen
           name={SCREEN_NAME.NOTIFICATIONS_SCREEN}
           component={NotificationsScreen}
           options={navOptionHandler}
         />
-      </Stack.Navigator>
+      </RootStack.Navigator>
     </NavigationContainer>
   );
 };

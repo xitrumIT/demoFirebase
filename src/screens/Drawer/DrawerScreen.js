@@ -1,7 +1,7 @@
 import {
   Dimensions,
   Image,
-  SafeAreaView,
+  ImageBackground,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,13 +15,15 @@ import React from 'react';
 const DrawerScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <View
+      <ImageBackground
+        source={IMAGE_NAME.BGR_AVT}
         style={{height: 150, alignItems: 'center', justifyContent: 'center'}}>
         <Image
-          source={IMAGE_NAME.ICON_PROFILE}
-          style={{height: 120, width: 120, borderRadius: 60}}
+          source={IMAGE_NAME.AVATAR_VN}
+          style={{height: 130, width: 130, borderRadius: 60}}
         />
-      </View>
+      </ImageBackground>
+
       <ScrollView style={{marginLeft: 5}}>
         <TouchableOpacity
           style={{marginTop: 20}}

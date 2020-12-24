@@ -14,7 +14,11 @@ import i18n from 'locales';
 const CartScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <CustomHeader title={i18n.t('Cart')} navigation={navigation} />
+      <CustomHeader
+        isDrawer={true}
+        title={i18n.t('Cart')}
+        navigation={navigation}
+      />
       <View style={styles.viewContent}>
         <TouchableOpacity
           onPress={() => navigation.navigate('HomeDetail')}

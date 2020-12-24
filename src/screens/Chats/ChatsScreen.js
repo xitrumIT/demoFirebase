@@ -15,7 +15,11 @@ import i18n from 'locales';
 const ChatsScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <CustomHeader title={i18n.t('Chats')} navigation={navigation} />
+      <CustomHeader
+        isDrawer={true}
+        title={i18n.t('Chats')}
+        navigation={navigation}
+      />
       <View style={styles.viewContent}>
         <TouchableOpacity
           onPress={() => navigation.navigate(SCREEN_NAME.NOTIFICATIONS_SCREEN)}

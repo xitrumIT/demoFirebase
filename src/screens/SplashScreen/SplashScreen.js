@@ -3,12 +3,12 @@ import {Dimensions, StyleSheet, Text, View} from 'react-native';
 import CustomHeader from '../../navigators/CustomHeader';
 import React from 'react';
 
-const LoadingScreen = ({navigation}) => {
+const SplashScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <CustomHeader title="LoadingScreen" navigation={navigation} />
+      <CustomHeader title="SplashScreen" navigation={navigation} />
       <View style={styles.viewContent}>
-        <Text style={styles.textContent}>LoadingScreen!</Text>
+        <Text style={styles.textContent}>SplashScreen!</Text>
       </View>
     </View>
   );
@@ -30,4 +30,4 @@ const styles = StyleSheet.create({
     paddingBottom: 10,
   },
 });
-export default LoadingScreen;
+export default SplashScreen;

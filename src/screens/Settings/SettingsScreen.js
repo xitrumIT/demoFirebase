@@ -13,7 +13,11 @@ import i18n from 'locales';
 const SettingsScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
-      <CustomHeader title={i18n.t('Settings')} navigation={navigation} />
+      <CustomHeader
+        isDrawer={true}
+        title={i18n.t('Settings')}
+        navigation={navigation}
+      />
       <View style={styles.viewContent}>
         <View>
           <Text style={styles.textContent}>Setting!</Text>
