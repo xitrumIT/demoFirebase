@@ -19,7 +19,6 @@ import SettingsScreen from '../screens/Settings/SettingsScreen';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import {createStackNavigator} from '@react-navigation/stack';
 import i18n from 'locales';
 import navigationRef from './NavigationServiceV5';
@@ -210,36 +209,7 @@ const Main = () => {
 
   //**Root**/
   const RootStack = createStackNavigator();
-  // const RootStackScreen = ({userToken}) => (
-  //   <RootStack.Navigator headerMode="none" initialRouteName="App">
-  //     {userToken ? (
-  //       <RootStack.Screen
-  //         name="App"
-  //         component={DrawerNavigator}
-  //         options={{
-  //           animationEnabled: false,
-  //         }}
-  //       />
-  //     ) : (
-  //       <RootStack.Screen
-  //         name="Auth"
-  //         component={AuthStackScreen}
-  //         options={{
-  //           animationEnabled: false,
-  //         }}
-  //       />
-  //     )}
-  //   </RootStack.Navigator>
-  // );
-  // const [isLoading, setIsLoading] = useState(true);
-  // const [user, setUser] = useState(null);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsLoading(!isLoading);
-  //     setUser({});
-  //   }, 500);
-  // }, []);
   return (
     <NavigationContainer ref={navigationRef}>
       <RootStack.Navigator
