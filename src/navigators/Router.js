@@ -213,7 +213,7 @@ const Main = () => {
   return (
     <NavigationContainer ref={navigationRef}>
       <RootStack.Navigator
-        initialRouteName={SCREEN_NAME.HOME_SCREEN}
+        initialRouteName={SCREEN_NAME.LOGIN_SCREEN}
         screenOptions={{gestureEnabled: false}}>
         <RootStack.Screen
           name={SCREEN_NAME.HOME_SCREEN}
@@ -223,6 +223,21 @@ const Main = () => {
         <RootStack.Screen
           name={SCREEN_NAME.NOTIFICATIONS_SCREEN}
           component={NotificationsScreen}
+          options={navOptionHandler}
+        />
+        <RootStack.Screen
+          name={SCREEN_NAME.LOGIN_SCREEN}
+          component={LoginScreen}
+          options={navOptionHandler}
+        />
+        <RootStack.Screen
+          name={SCREEN_NAME.REGISTER_SCREEN}
+          component={RegisterScreen}
+          options={navOptionHandler}
+        />
+        <RootStack.Screen
+          name={SCREEN_NAME.FORGOT_PASSWORD_SCREEN}
+          component={ForgotPasswordScreen}
           options={navOptionHandler}
         />
       </RootStack.Navigator>

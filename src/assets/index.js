@@ -1,4 +1,4 @@
-const IMAGE_NAME = {
+const IMAGES_NAME = {
   ICON_PROFILE: require('./images/profile.png'),
   ICON_MENU: require('./images/menu.png'),
   ICON_BACK: require('./images/back.png'),
@@ -13,6 +13,8 @@ const IMAGE_NAME = {
   1: require('./images/1.png'),
   2: require('./images/2.png'),
   3: require('./images/3.png'),
+  LOGIN_LOGO: require('./images/login_logo.png'),
+  REGISTER_LOGO: require('./images/register_logo.png'),
   AVATAR_2: require('./images/avatar2.png'),
   C_7: require('./images/c7.jpg'),
   FACEBOOK: require('./images/facebook.png'),
@@ -26,4 +28,4 @@ const IMAGE_NAME = {
   AVATAR_VN: require('./images/Avatar_VN.jpg'),
 };
 
-export default IMAGE_NAME;
+export default IMAGES_NAME;

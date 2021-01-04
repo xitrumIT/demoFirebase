@@ -9,17 +9,18 @@ import {
   View,
 } from 'react-native';
 
-import IMAGE_NAME from '../../assets/index';
+import IMAGES_NAME from '../../assets/index';
 import React from 'react';
+import SCREEN_NAME from '../../components/ScreenName';
 
 const DrawerScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={IMAGE_NAME.BGR_AVT}
+        source={IMAGES_NAME.BGR_AVT}
         style={{height: 150, alignItems: 'center', justifyContent: 'center'}}>
         <Image
-          source={IMAGE_NAME.AVATAR_VN}
+          source={IMAGES_NAME.AVATAR_VN}
           style={{height: 130, width: 130, borderRadius: 60}}
         />
       </ImageBackground>
@@ -27,20 +28,19 @@ const DrawerScreen = ({navigation}) => {
       <ScrollView style={{marginLeft: 5}}>
         <TouchableOpacity
           style={{marginTop: 20}}
-          onPress={() => navigation.navigate('MenuTab')}>
+          onPress={() => navigation.navigate(SCREEN_NAME.MENU_TAB)}>
           <Text>Menu Tab</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={{marginTop: 20}}
-          onPress={() => navigation.navigate('Notifications')}>
+          onPress={() => navigation.navigate(SCREEN_NAME.NOTIFICATIONS_SCREEN)}>
           <Text>Notifications</Text>
         </TouchableOpacity>
       </ScrollView>
 
       <TouchableOpacity
         style={{marginTop: 20, marginLeft: 5}}
-        // onPress={() => navigation.navigate('Login')}
-      >
+        onPress={() => navigation.navigate(SCREEN_NAME.LOGIN_SCREEN)}>
         <Text>Logout</Text>
       </TouchableOpacity>
     </View>

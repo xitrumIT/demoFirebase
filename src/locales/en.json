@@ -1,9 +1,16 @@
 {
   "ok": "OK",
-  "cancel": "キャンセル",
-  "close": "閉じる",
-  "save": "閉じる",
-  "error": "エラー",
+  "cancel": "Cancel",
+  "close": "Close",
+  "save": "Save",
+  "error": "Error",
+
+  "email": "Email",
+  "password": "Password",
+  "passwordConfirm": "Password Confirm",
+  "forgotPassword": "Forgot your password?",
+  "or": "or",
+  "noAccount": "Don't have a account ?",
 
   "Loading": "Loading",
   "Register": "Register",

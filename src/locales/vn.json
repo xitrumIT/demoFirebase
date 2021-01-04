@@ -5,6 +5,13 @@
   "save": "Lưu",
   "error": "Lỗi",
 
+  "email": "Email",
+  "password": "Mật khẩu",
+  "passwordConfirm": "Nhập lại mật khẩu",
+  "forgotPassword": "Quên mật khẩu ?",
+  "or": "hoặc",
+  "noAccount": "Bạn không có tài khoản ?",
+
   "Loading": "Đang tải",
   "Register": "Đăng ký",
   "Login": "Đăng nhập",

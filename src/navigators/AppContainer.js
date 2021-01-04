@@ -1,27 +1,18 @@
 import {Alert, BackHandler} from 'react-native';
+import React, {useEffect} from 'react';
 
 import NavigationService from './NavigationServiceV5';
-import React from 'react';
 import TopLevelNavigator from './Router';
 
-export default class AppContainer extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isLeftDrawerOpened: false,
-      isRightDrawerOpened: false,
+export default function AppContainer() {
+  useEffect(() => {
+    BackHandler.addEventListener('hardwareBackPress', handleBackButton);
+    return () => {
+      BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     };
-  }
+  }, []);
 
-  componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this.handleBackButton);
-  }
-
-  componentWillUnmount() {
-    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButton);
-  }
-
-  handleBackButton() {
+  const handleBackButton = () => {
     Alert.alert(
       'Exit App',
       'Do you want to exit?',
@@ -36,15 +27,13 @@ export default class AppContainer extends React.Component {
       {cancelable: false},
     );
     return true;
-  }
+  };
 
-  render() {
-    return (
-      <TopLevelNavigator
-        ref={(navigatorRef) => {
-          NavigationService.setTopLevelNavigator(navigatorRef);
-        }}
-      />
-    );
-  }
+  return (
+    <TopLevelNavigator
+      refs={(navigatorRef) => {
+        NavigationService.setTopLevelNavigator(navigatorRef);
+      }}
+    />
+  );
 }

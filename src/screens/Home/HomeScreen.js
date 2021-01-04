@@ -6,10 +6,10 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import React, {useContext, useEffect} from 'react';
 
 import CustomHeader from '../../navigators/CustomHeader';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import React from 'react';
 import i18n from 'locales';
 
 const HomeScreen = ({navigation}) => {

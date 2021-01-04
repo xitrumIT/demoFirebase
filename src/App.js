@@ -1,15 +1,20 @@
-import {Platform, SafeAreaView} from 'react-native';
-import React, {Component} from 'react';
+import {SafeAreaView, StyleSheet} from 'react-native';
 
 import AppContainer from './navigators/AppContainer';
-import Router from './navigators/Router';
+import React from 'react';
+import {UserProvider} from './context/user';
 
-export default class App extends Component {
-  render() {
-    return (
-      <SafeAreaView style={{flex: 1}}>
-        <Router />
-      </SafeAreaView>
-    );
-  }
-}
+const App = () => {
+  return (
+    <SafeAreaView style={styles.container}>
+      <UserProvider>
+        <AppContainer />
+      </UserProvider>
+    </SafeAreaView>
+  );
+};
+const styles = StyleSheet.create({
+  container: {flex: 1},
+});
+
+export default App;
