@@ -1,16 +1,22 @@
 import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useContext} from 'react';
 
 import {DrawerActions} from '@react-navigation/native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import React from 'react';
+import {UserContext} from '../context/user';
+import {logOpenDrawer} from '../services/analytics';
 
 const CustomHeader = ({isDrawer, navigation, title}) => {
+  const u = useContext(UserContext);
   return (
     <View style={styles.container}>
       <View style={styles.viewDrawer}>
         {isDrawer ? (
           <TouchableOpacity
-            onPress={() => navigation.dispatch(DrawerActions.openDrawer())}>
+            onPress={() => {
+              logOpenDrawer(u.deviceId);
+              navigation.dispatch(DrawerActions.openDrawer());
+            }}>
             <Ionicons name="reorder-four-outline" size={35} />
           </TouchableOpacity>
         ) : (

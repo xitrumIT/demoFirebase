@@ -1,7 +1,7 @@
 import {Platform, Text} from 'react-native';
 import React, {useState} from 'react';
+import {navigationRef, routeNameRef} from './NavigationServiceV5';
 
-import {AuthContext} from '../context/user';
 import CartScreen from '../screens/Cart/CartScreen';
 import ChatsScreen from '../screens/Chats/ChatsScreen';
 import DrawerScreen from '../screens/Drawer/DrawerScreen';
@@ -17,11 +17,11 @@ import SCREEN_NAME from '../components/ScreenName';
 import SettingsDetail from '../screens/Settings/SettingsDetail';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import analytics from '@react-native-firebase/analytics';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
 import i18n from 'locales';
-import navigationRef from './NavigationServiceV5';
 
 /**MAIN**/
 const Main = () => {
@@ -211,7 +211,25 @@ const Main = () => {
   const RootStack = createStackNavigator();
 
   return (
-    <NavigationContainer ref={navigationRef}>
+    <NavigationContainer
+      ref={navigationRef}
+      onReady={() =>
+        (routeNameRef.current = navigationRef.current.getCurrentRoute().name)
+      }
+      onStateChange={async () => {
+        const previousRouteName = routeNameRef.current;
+        const currentRouteName = navigationRef.current.getCurrentRoute().name;
+
+        if (previousRouteName !== currentRouteName) {
+          await analytics().logScreenView({
+            screen_name: currentRouteName,
+            screen_class: currentRouteName,
+          });
+        }
+
+        // Save the current route name for later comparision
+        routeNameRef.current = currentRouteName;
+      }}>
       <RootStack.Navigator
         initialRouteName={SCREEN_NAME.LOGIN_SCREEN}
         screenOptions={{gestureEnabled: false}}>

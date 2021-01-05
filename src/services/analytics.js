@@ -5,13 +5,26 @@ const getCurrentTime = () => {
   return moment.utc(Date.now()).local().format();
 };
 
-const logOpenTopApp = (userId, deviceId) => {
-  analytics().logEvent('open_top_app', {
-    screen_name: 'TopApp',
-    user_id: userId,
+const logGoHome = (deviceId) => {
+  analytics().logEvent('open_home', {
+    screen_name: 'Home Screen',
+    device_id: deviceId,
+    time: getCurrentTime(),
+  });
+};
+const logOpenDrawer = (deviceId) => {
+  analytics().logEvent('open_drawer', {
+    device_id: deviceId,
+    time: getCurrentTime(),
+  });
+};
+const logLogin = (deviceId) => {
+  analytics().logEvent('click_login', {
+    screen_name: 'Login',
+    event_click: 'Click_Login_Button',
     device_id: deviceId,
     time: getCurrentTime(),
   });
 };
 
-export {logOpenTopApp};
+export {logGoHome, logOpenDrawer, logLogin};

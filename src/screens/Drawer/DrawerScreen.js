@@ -8,12 +8,16 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import React, {useContext, useEffect} from 'react';
 
 import IMAGES_NAME from '../../assets/index';
-import React from 'react';
 import SCREEN_NAME from '../../components/ScreenName';
+import {UserContext} from '../../context/user';
+import {logOpenDrawer} from '../../services/analytics';
 
 const DrawerScreen = ({navigation}) => {
+  const u = useContext(UserContext);
+
   return (
     <View style={styles.container}>
       <ImageBackground

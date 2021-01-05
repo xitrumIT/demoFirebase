@@ -17,15 +17,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import SCREEN_NAME from '../../components/ScreenName';
 import {UserContext} from '../../context/user';
 import i18n from 'locales';
+import {logLogin} from '../../services/analytics';
 
 const LoginScreen = ({navigation}) => {
   const u = useContext(UserContext);
-  const [passwordShown, setPasswordShown] = useState(false);
+  const [passwordShown, setPasswordShown] = useState(true);
 
-  const togglePasswordVisiblity = () => {
+  const togglePasswordVisibility = () => {
     setPasswordShown(passwordShown ? false : true);
   };
-
   useEffect(() => {
     const checkSystem = async () => {
       const deviceID = DeviceInfo.getUniqueId();
@@ -49,6 +49,7 @@ const LoginScreen = ({navigation}) => {
           <TextInput
             style={styles.txtInput}
             maxLength={255}
+            keyboardType={'email-address'}
             onChangeText={(text) => u.setEmail(text)}
             value={u.email}
             placeholder={i18n.t('email')}
@@ -62,14 +63,14 @@ const LoginScreen = ({navigation}) => {
               value={u.password}
               placeholder={i18n.t('password')}
               underlineColorAndroid="transparent"
-              secureTextEntry={!passwordShown}
+              secureTextEntry={passwordShown}
             />
             <TouchableOpacity
               style={styles.touchEye}
-              onPress={() => togglePasswordVisiblity()}>
+              onPress={() => togglePasswordVisibility()}>
               <Ionicons
                 name={
-                  !passwordShown
+                  passwordShown
                     ? Platform.OS === 'ios'
                       ? 'ios-eye-off'
                       : 'md-eye-off'
@@ -86,12 +87,17 @@ const LoginScreen = ({navigation}) => {
         <View style={styles.blockBottom}>
           <TouchableOpacity
             style={styles.btnLogin}
-            onPress={() => navigation.navigate(SCREEN_NAME.HOME_SCREEN)}>
+            onPress={() => {
+              logLogin(u.deviceId);
+              navigation.navigate(SCREEN_NAME.HOME_SCREEN);
+            }}>
             <Text style={styles.txtButton}>{i18n.t('Login')}</Text>
           </TouchableOpacity>
           <Text style={styles.txtOr}> {i18n.t('or')}</Text>
           <View style={styles.otherLogin}>
-            <TouchableOpacity style={styles.touchOther}>
+            <TouchableOpacity
+              style={styles.touchOther}
+              onPress={() => console.log('login Mobile')}>
               <Icon
                 name={
                   Platform.OS === 'ios'
@@ -102,7 +108,9 @@ const LoginScreen = ({navigation}) => {
                 size={40}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.touchOther}>
+            <TouchableOpacity
+              style={styles.touchOther}
+              onPress={() => console.log('login Google')}>
               <Icon
                 name={
                   Platform.OS === 'ios' ? 'ios-logo-google' : 'md-logo-google'
@@ -111,7 +119,9 @@ const LoginScreen = ({navigation}) => {
                 size={40}
               />
             </TouchableOpacity>
-            <TouchableOpacity style={styles.touchOther}>
+            <TouchableOpacity
+              style={styles.touchOther}
+              onPress={() => console.log('login Facebook')}>
               <Icon
                 name={
                   Platform.OS === 'ios'

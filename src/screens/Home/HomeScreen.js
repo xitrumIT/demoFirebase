@@ -10,9 +10,17 @@ import React, {useContext, useEffect} from 'react';
 
 import CustomHeader from '../../navigators/CustomHeader';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {UserContext} from '../../context/user';
 import i18n from 'locales';
+import {logGoHome} from '../../services/analytics';
 
 const HomeScreen = ({navigation}) => {
+  const u = useContext(UserContext);
+
+  useEffect(() => {
+    logGoHome(u.deviceId);
+  }, [u.deviceId]);
+
   return (
     <View style={styles.container}>
       <CustomHeader
@@ -35,7 +43,7 @@ const HomeScreen = ({navigation}) => {
     </View>
   );
 };
-const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
+// const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
