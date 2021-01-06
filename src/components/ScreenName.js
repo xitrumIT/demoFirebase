@@ -11,6 +11,7 @@ const SCREEN_NAME = {
   SETTINGS_DETAIL: 'SettingsDetail',
 
   //Auth Screen
+  AUTH_SCREEN: 'AuthScreen',
   LOGIN_SCREEN: 'Login',
   REGISTER_SCREEN: 'Register',
   FORGOT_PASSWORD_SCREEN: 'ForgotPassword',
@@ -18,7 +19,7 @@ const SCREEN_NAME = {
   //Other Screen
   SPLASH_SCREEN: 'Splash',
   NOTIFICATIONS_SCREEN: 'Notifications',
-  MENU_TAB: 'MenuTab',
+  HOME_COMPONENT: 'Home_Component',
 };
 
 export default SCREEN_NAME;

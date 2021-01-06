@@ -33,6 +33,8 @@ const HomeScreen = ({navigation}) => {
           style={styles.touchView}
           onPress={() => navigation.navigate('HomeDetail')}>
           <Text style={styles.textHome}>Home!</Text>
+          <Text style={styles.textHome}>{u.user}</Text>
+
           <Ionicons
             name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
             size={25}

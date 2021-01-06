@@ -2,6 +2,7 @@ import {
   Dimensions,
   Image,
   ImageBackground,
+  Platform,
   ScrollView,
   StyleSheet,
   Text,
@@ -11,13 +12,13 @@ import {
 import React, {useContext, useEffect} from 'react';
 
 import IMAGES_NAME from '../../assets/index';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import SCREEN_NAME from '../../components/ScreenName';
 import {UserContext} from '../../context/user';
-import {logOpenDrawer} from '../../services/analytics';
 
 const DrawerScreen = ({navigation}) => {
   const u = useContext(UserContext);
-
+  const logout = useContext(UserContext);
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -31,22 +32,52 @@ const DrawerScreen = ({navigation}) => {
 
       <ScrollView style={{marginLeft: 5}}>
         <TouchableOpacity
-          style={{marginTop: 20}}
+          style={{
+            marginTop: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+          }}
           onPress={() => navigation.navigate(SCREEN_NAME.MENU_TAB)}>
-          <Text>Menu Tab</Text>
+          <Ionicons
+            name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
+            size={25}
+            color="#28811e"
+          />
+          <Text style={{marginLeft: 10}}>Menu Tab</Text>
         </TouchableOpacity>
         <TouchableOpacity
-          style={{marginTop: 20}}
+          style={{marginTop: 20, flexDirection: 'row', alignItems: 'center'}}
           onPress={() => navigation.navigate(SCREEN_NAME.NOTIFICATIONS_SCREEN)}>
-          <Text>Notifications</Text>
+          <Ionicons
+            name={
+              Platform.OS === 'ios' ? 'ios-notifications' : 'md-notifications'
+            }
+            size={25}
+            color="#28811e"
+          />
+          <Text style={{marginLeft: 10}}>Notifications</Text>
         </TouchableOpacity>
       </ScrollView>
 
-      <TouchableOpacity
-        style={{marginTop: 20, marginLeft: 5}}
-        onPress={() => navigation.navigate(SCREEN_NAME.LOGIN_SCREEN)}>
-        <Text>Logout</Text>
-      </TouchableOpacity>
+      <View>
+        <TouchableOpacity
+          style={{
+            alignItems: 'center',
+            alignSelf: 'center',
+            flexDirection: 'row',
+          }}
+          onPress={() => {
+            // logout();
+            navigation.navigate(SCREEN_NAME.LOGIN_SCREEN);
+          }}>
+          <Text style={{color: '#ed5565', fontWeight: 'bold'}}>Logout</Text>
+          <Ionicons
+            name={Platform.OS === 'ios' ? 'ios-log-out' : 'md-log-out'}
+            size={25}
+            color="#28811e"
+          />
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

@@ -1,7 +1,8 @@
-import {Platform, Text} from 'react-native';
-import React, {useState} from 'react';
+import {ActivityIndictor, Platform, Text} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
 import {navigationRef, routeNameRef} from './NavigationServiceV5';
 
+import AsyncStorage from '@react-native-community/async-storage';
 import CartScreen from '../screens/Cart/CartScreen';
 import ChatsScreen from '../screens/Chats/ChatsScreen';
 import DrawerScreen from '../screens/Drawer/DrawerScreen';
@@ -9,6 +10,7 @@ import ForgotPasswordScreen from '../screens/Auth/ForgotPasswordScreen';
 import HomeDetail from '../screens/Home/HomeDetail';
 import HomeScreen from '../screens/Home/HomeScreen';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Loading from '../components/Loading';
 import LoginScreen from '../screens/Auth/LoginScreen';
 import {NavigationContainer} from '@react-navigation/native';
 import NotificationsScreen from '../screens/Notifications/NotificationsScreen';
@@ -17,7 +19,9 @@ import SCREEN_NAME from '../components/ScreenName';
 import SettingsDetail from '../screens/Settings/SettingsDetail';
 import SettingsScreen from '../screens/Settings/SettingsScreen';
 import SplashScreen from '../screens/SplashScreen/SplashScreen';
+import {UserContext} from '../context/user';
 import analytics from '@react-native-firebase/analytics';
+import auth from '@react-native-firebase/auth';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {createStackNavigator} from '@react-navigation/stack';
@@ -84,40 +88,44 @@ const Main = () => {
     );
   };
 
-  // const StackCart = createStackNavigator();
+  const StackCart = createStackNavigator();
   const CartStackScreen = ({navigation, route}) => {
     return (
-      <RootStack.Navigator>
-        <RootStack.Screen
+      <StackCart.Navigator>
+        <StackCart.Screen
           name="Cart"
           component={CartScreen}
           options={navOptionHandler}
         />
-      </RootStack.Navigator>
+      </StackCart.Navigator>
     );
   };
 
   //**Stack Auth **/
-  // const StackAuth = createStackNavigator();
-  // const AuthStackScreen = () => (
-  //   <StackAuth.Navigator>
-  //     <StackAuth.Screen
-  //       name="SignIn"
-  //       component={LoginScreen}
-  //       options={navOptionHandler}
-  //     />
-  //     <StackAuth.Screen
-  //       name="Register"
-  //       component={RegisterScreen}
-  //       options={navOptionHandler}
-  //     />
-  //     <StackAuth.Screen
-  //       name="ForgotPassword"
-  //       component={ForgotPasswordScreen}
-  //       options={navOptionHandler}
-  //     />
-  //   </StackAuth.Navigator>
-  // );
+  const StackAuth = createStackNavigator();
+  const AuthStackScreen = ({navigation}) => {
+    return (
+      <StackAuth.Navigator
+        initialRouteName={SCREEN_NAME.LOGIN_SCREEN}
+        screenOptions={{gestureEnabled: false}}>
+        <StackAuth.Screen
+          name={SCREEN_NAME.LOGIN_SCREEN}
+          component={LoginScreen}
+          options={navOptionHandler}
+        />
+        <StackAuth.Screen
+          name={SCREEN_NAME.REGISTER_SCREEN}
+          component={RegisterScreen}
+          options={navOptionHandler}
+        />
+        <StackAuth.Screen
+          name={SCREEN_NAME.FORGOT_PASSWORD_SCREEN}
+          component={ForgotPasswordScreen}
+          options={navOptionHandler}
+        />
+      </StackAuth.Navigator>
+    );
+  };
 
   //**Tab**/
   const Tab = createBottomTabNavigator();
@@ -199,16 +207,40 @@ const Main = () => {
   const DrawerNavigator = ({navigation}) => {
     return (
       <Drawer.Navigator
-        initialRouteName={SCREEN_NAME.MENU_TAB}
+        initialRouteName={SCREEN_NAME.DRAWER_SCREEN}
         drawerContent={() => <DrawerScreen navigation={navigation} />}>
-        <Drawer.Screen name={SCREEN_NAME.MENU_TAB} component={TabNavigator} />
+        <Drawer.Screen
+          name={SCREEN_NAME.DRAWER_SCREEN}
+          component={TabNavigator}
+        />
         {/* <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
       </Drawer.Navigator>
     );
   };
 
   //**Root**/
-  const RootStack = createStackNavigator();
+  const StackRoot = createStackNavigator();
+  const RootStackScreen = ({navigation}) => (
+    <StackRoot.Navigator
+      initialRouteName={SCREEN_NAME.AUTH_SCREEN}
+      screenOptions={{gestureEnabled: false}}>
+      <StackRoot.Screen
+        name={SCREEN_NAME.HOME_COMPONENT}
+        component={DrawerNavigator}
+        options={navOptionHandler}
+      />
+      <StackRoot.Screen
+        name={SCREEN_NAME.NOTIFICATIONS_SCREEN}
+        component={NotificationsScreen}
+        options={navOptionHandler}
+      />
+      <StackRoot.Screen
+        name={SCREEN_NAME.AUTH_SCREEN}
+        component={AuthStackScreen}
+        options={navOptionHandler}
+      />
+    </StackRoot.Navigator>
+  );
 
   return (
     <NavigationContainer
@@ -226,39 +258,10 @@ const Main = () => {
             screen_class: currentRouteName,
           });
         }
-
-        // Save the current route name for later comparision
+        // Save the current route name for later comparison
         routeNameRef.current = currentRouteName;
       }}>
-      <RootStack.Navigator
-        initialRouteName={SCREEN_NAME.LOGIN_SCREEN}
-        screenOptions={{gestureEnabled: false}}>
-        <RootStack.Screen
-          name={SCREEN_NAME.HOME_SCREEN}
-          component={DrawerNavigator}
-          options={navOptionHandler}
-        />
-        <RootStack.Screen
-          name={SCREEN_NAME.NOTIFICATIONS_SCREEN}
-          component={NotificationsScreen}
-          options={navOptionHandler}
-        />
-        <RootStack.Screen
-          name={SCREEN_NAME.LOGIN_SCREEN}
-          component={LoginScreen}
-          options={navOptionHandler}
-        />
-        <RootStack.Screen
-          name={SCREEN_NAME.REGISTER_SCREEN}
-          component={RegisterScreen}
-          options={navOptionHandler}
-        />
-        <RootStack.Screen
-          name={SCREEN_NAME.FORGOT_PASSWORD_SCREEN}
-          component={ForgotPasswordScreen}
-          options={navOptionHandler}
-        />
-      </RootStack.Navigator>
+      <RootStackScreen />
     </NavigationContainer>
   );
 };

@@ -21,6 +21,7 @@ import {logLogin} from '../../services/analytics';
 
 const LoginScreen = ({navigation}) => {
   const u = useContext(UserContext);
+  // const login = useContext(UserContext);
   const [passwordShown, setPasswordShown] = useState(true);
 
   const togglePasswordVisibility = () => {
@@ -89,7 +90,8 @@ const LoginScreen = ({navigation}) => {
             style={styles.btnLogin}
             onPress={() => {
               logLogin(u.deviceId);
-              navigation.navigate(SCREEN_NAME.HOME_SCREEN);
+              // login(u.email, u.password);
+              navigation.navigate(SCREEN_NAME.HOME_COMPONENT);
             }}>
             <Text style={styles.txtButton}>{i18n.t('Login')}</Text>
           </TouchableOpacity>
