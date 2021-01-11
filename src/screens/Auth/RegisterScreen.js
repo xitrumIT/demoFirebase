@@ -22,7 +22,7 @@ const RegisterScreen = ({navigation}) => {
   const {register} = useContext(UserContext);
 
   const togglePasswordVisibility = () => {
-    setPasswordShown(passwordShown ? false : true);
+    setPasswordShown(!passwordShown);
   };
   return (
     <View style={styles.container}>
@@ -77,7 +77,7 @@ const RegisterScreen = ({navigation}) => {
               style={styles.txtInput}
               maxLength={255}
               onChangeText={(text) => u.setPasswordConfirm(text)}
-              placeholder={i18n.t('passwordConfirm')}
+              placeholder={i18n.t('password_confirm')}
               underlineColorAndroid="transparent"
               secureTextEntry={passwordShown}
             />
@@ -98,7 +98,7 @@ const RegisterScreen = ({navigation}) => {
               />
             </TouchableOpacity>
           </View>
-          <Text style={styles.forgotPassword}>{i18n.t('forgotPassword')}</Text>
+          <Text style={styles.forgotPassword}>{i18n.t('forgot_password')}</Text>
         </View>
         <View style={styles.blockBottom}>
           <TouchableOpacity
@@ -110,7 +110,7 @@ const RegisterScreen = ({navigation}) => {
             <Text style={styles.txtButton}>{i18n.t('Register')}</Text>
           </TouchableOpacity>
           <View style={styles.viewRegister}>
-            <Text style={styles.txtAccount}>{i18n.t('haveAccount')}</Text>
+            <Text style={styles.txtAccount}>{i18n.t('have_account')}</Text>
             <TouchableOpacity
               onPress={() => navigation.navigate(SCREEN_NAME.LOGIN_SCREEN)}>
               <Text style={styles.txtRegister}>{i18n.t('Login')}</Text>

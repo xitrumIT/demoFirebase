@@ -1,17 +1,10 @@
 {
-  "ok": "OK",
+  "ok": "Đồng ý",
   "cancel": "Huỷ",
   "close": "Đóng",
   "save": "Lưu",
   "error": "Lỗi",
-
-  "email": "Email",
-  "password": "Mật khẩu",
-  "passwordConfirm": "Nhập lại mật khẩu",
-  "forgotPassword": "Quên mật khẩu ?",
-  "or": "hoặc",
-  "noAccount": "Bạn không có tài khoản ?",
-  "haveAccount": "Bạn đã có tài khoản ?",
+  "exit": "Thoát",
 
   "Loading": "Đang tải",
   "Register": "Đăng ký",
@@ -24,5 +17,26 @@
   "HomeDetail": "Trang chủ chi tiết",
   "Notification": "Thông báo",
   "Cart": "Giỏ Hàng",
-  "Profile": "Hồ sơ"
+  "Profile": "Hồ sơ",
+
+  "register_success": "Đăng ký tài khoản thành công",
+  "title_register": "Vui lòng đăng nhập",
+  "email": "Email",
+  "password": "Mật khẩu",
+  "or": "hoặc",
+  "password_confirm": "Nhập lại mật khẩu",
+  "forgot_password": "Quên mật khẩu ?",
+  "title_exit": "Bạn có muốn thoát ?",
+  "forgot_password_success": "Khôi phục mật khẩu thành công",
+  "title_forgot_password": "Vui lòng kiểm tra email và đăng nhập",
+  "password_recovery": "Khôi phục mật khẩu",
+  "input_email": "Điền vào email của bạn",
+  "email_empty": "Email không được bỏ trống",
+  "email_format": "Định dạng của Email không có đúng",
+  "password_char_min": "Mật khẩu phải chứa ít nhất 6 ký tự",
+  "password_error": "Mật khẩu không hợp lệ.",
+  "request_max": "Quyền truy cập vào tài khoản này đã tạm thời bị vô hiệu hóa do nhiều lần đăng nhập không thành công.\n  Bạn có thể khôi phục ngay lập tức bằng cách đặt lại mật khẩu của mình hoặc bạn có thể thử lại sau.",
+  "user_error": "Tài khoản đăng nhập không đúng hoặc người dùng có thể đã bị xóa.",
+  "no_account": "Bạn không có tài khoản ?",
+  "have_account": "Bạn đã có tài khoản ?"
 }

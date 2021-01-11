@@ -43,7 +43,12 @@ const styles = StyleSheet.create({
   container: {flexDirection: 'row', justifyContent: 'space-around', height: 50},
   viewDrawer: {flex: 1, justifyContent: 'center'},
   viewIcon: {flexDirection: 'row', alignItems: 'center'},
-  viewHeader: {flex: 1.5, justifyContent: 'center'},
-  txtHeader: {textAlign: 'center', fontWeight: 'bold', fontSize: 20},
+  viewHeader: {flex: 4, justifyContent: 'center'},
+  txtHeader: {
+    textAlign: 'center',
+    fontWeight: 'bold',
+    fontSize: 20,
+    color: '#3f9e7c',
+  },
 });
 export default CustomHeader;

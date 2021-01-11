@@ -1,14 +1,71 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Alert,
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useState} from 'react';
 
 import CustomHeader from '../../navigators/CustomHeader';
-import React from 'react';
+import SCREEN_NAME from '../../components/ScreenName';
+import auth from '@react-native-firebase/auth';
+import i18n from 'locales';
 
 const ForgotPasswordScreen = ({navigation}) => {
+  const [email, setEmail] = useState('');
+  const [showLoading, setShowLoading] = useState(false);
+  const CAlert = (title, message) => {
+    Alert.alert(
+      title,
+      message,
+      [{text: i18n.t('ok'), onPress: () => navigation.navigate('Login')}],
+      {cancelable: false},
+    );
+  };
+
+  const onResetPassword = async () => {
+    setShowLoading(true);
+    try {
+      await auth().sendPasswordResetEmail(email);
+      CAlert(
+        i18n.t('forgot_password_success'),
+        i18n.t('title_forgot_password'),
+      );
+      setShowLoading(false);
+    } catch (e) {
+      setShowLoading(false);
+      Alert.alert(e.message);
+    }
+  };
+
   return (
     <View style={styles.container}>
       <CustomHeader title="ForgotPasswordScreen" navigation={navigation} />
       <View style={styles.viewContent}>
-        <Text>ForgotPasswordScreen!</Text>
+        {/* <Image source={require('../../assets/key.png')} style={styles.Image} /> */}
+        <TextInput
+          style={styles.textInput}
+          placeholder={i18n.t('input_email')}
+          onChangeText={setEmail}
+          value={email}
+          underlineColorAndroid="transparent"
+        />
+
+        <TouchableOpacity
+          style={styles.btnLogin}
+          onPress={() => onResetPassword()}>
+          <Text style={styles.textLogin}>{i18n.t('password_recovery')}</Text>
+        </TouchableOpacity>
+        {showLoading && (
+          <View style={styles.activity}>
+            <ActivityIndicator size="large" color="#59b18c" />
+          </View>
+        )}
       </View>
     </View>
   );
@@ -28,6 +85,34 @@ const styles = StyleSheet.create({
     color: 'red',
     fontWeight: 'bold',
     paddingBottom: 10,
+  },
+  textInput: {
+    //flex:1,
+    height: 60,
+    alignSelf: 'stretch',
+    padding: 16,
+    marginBottom: 20,
+    backgroundColor: '#cccccc',
+    borderRadius: 10,
+    marginHorizontal: 10,
+  },
+  btnLogin: {
+    alignSelf: 'stretch',
+    padding: 20,
+    alignItems: 'center',
+    backgroundColor: '#ff7373',
+    borderRadius: 10,
+    marginHorizontal: 10,
+    marginTop: 10,
+  },
+  activity: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 export default ForgotPasswordScreen;

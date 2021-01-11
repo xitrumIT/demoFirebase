@@ -1,17 +1,10 @@
 {
-  "ok": "OK",
+  "ok": "同意する",
   "cancel": "キャンセル",
   "close": "閉じる",
   "save": "閉じる",
   "error": "エラー",
-
-  "email": "メール",
-  "password": "パスワード",
-  "passwordConfirm": "パスワードの確認",
-  "forgotPassword": "パスワードをお忘れですか ？",
-  "or": "または",
-  "noAccount": "アカウントを持っていない ?",
-  "haveAccount": "アカウントを持っています ?",
+  "exit": "出口",
 
   "Loading": "読み込み中",
   "Register": "登録",
@@ -24,5 +17,26 @@
   "HomeDetail": "ホームディテール",
   "Notification": "お知らせ",
   "Cart": "カート",
-  "Profile": "プロフィール"
+  "Profile": "プロフィール",
+
+  "register_success": "登録成功",
+  "title_register": "ログインしてください",
+  "email": "メール",
+  "password": "パスワード",
+  "or": "または",
+  "password_confirm": "パスワードの確認",
+  "forgot_password": "パスワードをお忘れですか ？",
+  "title_exit": "終了しますか?",
+  "forgot_password_success": "パスワードを忘れた成功",
+  "title_forgot_password": "メールアドレスを確認してログインしてください",
+  "password_recovery": "パスワードの復元",
+  "input_email": "メールアドレスを入力",
+  "email_empty": "メールを空にすることはできません",
+  "email_format": "メールアドレスの形式が正しくありません",
+  "password_char_min": "パスワードは6文字以上",
+  "password_error": "パスワードが無効であるか、ユーザーがパスワードを持っていません。",
+  "request_max": "多くのログイン試行の失敗により、このアカウントへのアクセスは一時的に無効になっています。\\n\n  パスワードをリセットしてすぐに復元することも、後で再試行することもできます。",
+  "user_error": "この識別子に対応するユーザーレコードはありません。 ユーザーが削除された可能性があります。",
+  "no_account": "アカウントを持っていない ?",
+  "have_account": "アカウントを持っています ?"
 }

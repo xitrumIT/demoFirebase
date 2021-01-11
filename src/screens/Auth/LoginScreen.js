@@ -1,4 +1,6 @@
 import {
+  ActivityIndicator,
+  Alert,
   Dimensions,
   Image,
   Platform,
@@ -8,25 +10,72 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import DeviceInfo from 'react-native-device-info';
+import FirebaseAuth from '../../services/firebaseAuth';
 import IMAGES_NAME from '../../assets/index';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import LottieView from 'lottie-react-native';
 import SCREEN_NAME from '../../components/ScreenName';
 import {UserContext} from '../../context/user';
+import auth from '@react-native-firebase/auth';
 import i18n from 'locales';
 import {logLogin} from '../../services/analytics';
 
 const LoginScreen = ({navigation}) => {
   const u = useContext(UserContext);
-  // const login = useContext(UserContext);
+  const [showLoading, setShowLoading] = useState(false);
   const [passwordShown, setPasswordShown] = useState(true);
+  const animation = useRef(null);
+
+  const onPress = () => {
+    animation.current.play();
+  };
+  const CAlert = (title, message) => {
+    Alert.alert(title, message, [{text: i18n.t('ok')}], {cancelable: false});
+  };
 
   const togglePasswordVisibility = () => {
-    setPasswordShown(passwordShown ? false : true);
+    setPasswordShown(!passwordShown);
   };
+
+  const goLogin = async () => {
+    logLogin(u.deviceId);
+    setShowLoading(true);
+    try {
+      const doLogin = await auth().signInWithEmailAndPassword(
+        u.email,
+        u.password,
+      );
+      setShowLoading(false);
+      if (doLogin.user) {
+        navigation.navigate(SCREEN_NAME.HOME_COMPONENT);
+      }
+    } catch (e) {
+      setShowLoading(false);
+      if (u.email === '') {
+        CAlert(i18n.t('error'), i18n.t('email_empty'));
+      } else if (e.code === 'auth/invalid-email') {
+        CAlert(i18n.t('error'), i18n.t('email_format'));
+      }
+      if (u.password <= 5) {
+        CAlert(i18n.t('error'), i18n.t('password_char_min'));
+      } else if (e.code === 'auth/wrong-password') {
+        CAlert(i18n.t('error'), i18n.t('password_error'));
+      }
+      if (e.code === 'auth/too-many-requests') {
+        CAlert(i18n.t('error'), i18n.t('request_max'));
+      }
+      if (e.code === 'auth/user-not-found') {
+        CAlert(i18n.t('error'), i18n.t('user_error'));
+      }
+      console.log(e.message);
+      // Alert.alert(e.message);
+    }
+  };
+
   useEffect(() => {
     const checkSystem = async () => {
       const deviceID = DeviceInfo.getUniqueId();
@@ -43,7 +92,12 @@ const LoginScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.viewLogo}>
-        <Image source={IMAGES_NAME.LOGIN_LOGO} style={styles.imgLogo} />
+        {/* <Image source={IMAGES_NAME.LOGIN_LOGO} style={styles.imgLogo} />
+         */}
+        <LottieView
+          source={require('../../assets/json/Login.json')}
+          ref={animation}
+        />
       </View>
       <View style={styles.viewContent}>
         <View>
@@ -51,7 +105,7 @@ const LoginScreen = ({navigation}) => {
             style={styles.txtInput}
             maxLength={255}
             keyboardType={'email-address'}
-            onChangeText={(text) => u.setEmail(text)}
+            onChangeText={u.setEmail}
             value={u.email}
             placeholder={i18n.t('email')}
             underlineColorAndroid="transparent"
@@ -60,7 +114,7 @@ const LoginScreen = ({navigation}) => {
             <TextInput
               style={styles.txtInput}
               maxLength={255}
-              onChangeText={(text) => u.setPassword(text)}
+              onChangeText={u.setPassword}
               value={u.password}
               placeholder={i18n.t('password')}
               underlineColorAndroid="transparent"
@@ -83,15 +137,20 @@ const LoginScreen = ({navigation}) => {
               />
             </TouchableOpacity>
           </View>
-          <Text style={styles.forgotPassword}>{i18n.t('forgotPassword')}</Text>
+          <Text
+            style={styles.forgotPassword}
+            onPress={() => {
+              navigation.navigate(SCREEN_NAME.FORGOT_PASSWORD_SCREEN);
+            }}>
+            {i18n.t('forgot_password')}
+          </Text>
         </View>
         <View style={styles.blockBottom}>
           <TouchableOpacity
             style={styles.btnLogin}
             onPress={() => {
-              logLogin(u.deviceId);
-              // login(u.email, u.password);
-              navigation.navigate(SCREEN_NAME.HOME_COMPONENT);
+              goLogin();
+              // navigation.navigate(SCREEN_NAME.HOME_COMPONENT);
             }}>
             <Text style={styles.txtButton}>{i18n.t('Login')}</Text>
           </TouchableOpacity>
@@ -136,7 +195,7 @@ const LoginScreen = ({navigation}) => {
             </TouchableOpacity>
           </View>
           <View style={styles.viewRegister}>
-            <Text style={styles.txtAccount}>{i18n.t('noAccount')}</Text>
+            <Text style={styles.txtAccount}>{i18n.t('no_account')}</Text>
             <TouchableOpacity
               onPress={() => navigation.navigate(SCREEN_NAME.REGISTER_SCREEN)}>
               <Text style={styles.txtRegister}>{i18n.t('Register')}</Text>
@@ -144,6 +203,11 @@ const LoginScreen = ({navigation}) => {
           </View>
         </View>
       </View>
+      {showLoading && (
+        <View style={styles.activity}>
+          <ActivityIndicator size="large" color="#59b18c" />
+        </View>
+      )}
     </View>
   );
 };
@@ -226,6 +290,15 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#fa4134',
+  },
+  activity: {
+    position: 'absolute',
+    left: 0,
+    right: 0,
+    top: 0,
+    bottom: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });
 export default LoginScreen;

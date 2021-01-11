@@ -15,10 +15,19 @@ import IMAGES_NAME from '../../assets/index';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import SCREEN_NAME from '../../components/ScreenName';
 import {UserContext} from '../../context/user';
+import auth from '@react-native-firebase/auth';
 
 const DrawerScreen = ({navigation}) => {
   const u = useContext(UserContext);
-  const logout = useContext(UserContext);
+
+  const goLogout = async () => {
+    try {
+      await auth().signOut();
+      navigation.navigate(SCREEN_NAME.LOGIN_SCREEN);
+    } catch (e) {
+      console.error(e);
+    }
+  };
   return (
     <View style={styles.container}>
       <ImageBackground
@@ -67,8 +76,7 @@ const DrawerScreen = ({navigation}) => {
             flexDirection: 'row',
           }}
           onPress={() => {
-            // logout();
-            navigation.navigate(SCREEN_NAME.LOGIN_SCREEN);
+            goLogout();
           }}>
           <Text style={{color: '#ed5565', fontWeight: 'bold'}}>Logout</Text>
           <Ionicons

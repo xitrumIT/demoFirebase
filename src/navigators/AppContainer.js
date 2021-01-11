@@ -1,8 +1,10 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {Alert, BackHandler} from 'react-native';
 import React, {useEffect} from 'react';
 
 import NavigationService from './NavigationServiceV5';
 import TopLevelNavigator from './Router';
+import i18n from 'locales';
 
 export default function AppContainer() {
   useEffect(() => {
@@ -11,21 +13,19 @@ export default function AppContainer() {
       BackHandler.addEventListener('hardwareBackPress', handleBackButton);
     };
   }, []);
-
-  const handleBackButton = () => {
+  const CAlert = (title, message) => {
     Alert.alert(
-      'Exit App',
-      'Do you want to exit?',
+      title,
+      message,
       [
-        {
-          text: 'No',
-          onPress: () => console.log('Cancel Pressed'),
-          style: 'cancel',
-        },
-        {text: 'Yes', onPress: () => BackHandler.exitApp()},
+        {text: i18n.t('cancel'), onPress: () => console.log('Cancel Pressed')},
+        {text: i18n.t('ok'), onPress: () => BackHandler.exitApp()},
       ],
       {cancelable: false},
     );
+  };
+  const handleBackButton = () => {
+    CAlert(i18n.t('exit'), i18n.t('title_exit'));
     return true;
   };
 
