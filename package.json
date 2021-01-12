@@ -14,12 +14,6 @@
     "remove": "rm -rf node_modules",
     "prettier": "prettier \"**/*.{js,jsx,css,json}\""
   },
-  "lint-staged": {
-    "./src/*.{js,jsx,ts,tsx}": [
-      "npx prettier --write",
-      "eslint src --fix-dry-run"
-    ]
-  },
   "dependencies": {
     "@gorhom/animated-tabbar": "^2.0.0",
     "@react-native-community/async-storage": "^1.12.0",
@@ -89,5 +83,11 @@
       "pre-commit": "lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
+  },
+  "lint-staged": {
+    "./src/*.{js,jsx,ts,tsx}": [
+      "npx prettier --write",
+      "eslint src --fix-dry-run"
+    ]
   }
 }
