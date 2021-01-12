@@ -4,15 +4,20 @@
   "private": true,
   "scripts": {
     "android": "react-native run-android",
+    "android:clean": "cd android && ./gradlew clean",
     "ios": "react-native run-ios",
     "start": "react-native start",
+    "start:no_cache": "react-native start --reset-cache",
     "test": "jest",
-    "lint": "eslint *.js **/*.js"
+    "eslint": "eslint .",
+    "npm:i": "npm i && npx pod-install",
+    "remove": "rm -rf node_modules",
+    "prettier": "prettier \"**/*.{js,jsx,css,json}\""
   },
   "lint-staged": {
-    "*.js": [
-      "npm run prettier",
-      "git add"
+    "./src/*.{js,jsx,ts,tsx}": [
+      "npx prettier --write",
+      "eslint src --fix-dry-run"
     ]
   },
   "dependencies": {
@@ -84,11 +89,5 @@
       "pre-commit": "lint-staged",
       "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
-  },
-  "lint-staged": {
-    "./src/*.{js,jsx,ts,tsx}": [
-      "npx prettier --write",
-      "eslint src/*.js --fix-dry-run"
-    ]
   }
 }
