@@ -10,9 +10,10 @@ const IMAGES_NAME = {
   ICON_SETTINGS_BLACK: require('./images/settings_black.png'),
 
   //test
-  1: require('./images/1.png'),
-  2: require('./images/2.png'),
-  3: require('./images/3.png'),
+  LOGIN_ANIMATION: require('./json/Login.json'),
+  REGISTER_ANIMATION: require('./json/Register.json'),
+  FORGOT_PASSWORD_ANIMATION: require('./json/Register.json'),
+
   LOGIN_LOGO: require('./images/login_logo.png'),
   REGISTER_LOGO: require('./images/register_logo.png'),
   AVATAR_2: require('./images/avatar2.png'),

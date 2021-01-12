@@ -12,6 +12,7 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import IMAGES_NAME from '../../assets/index';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import LottieView from 'lottie-react-native';
 import SCREEN_NAME from '../../components/ScreenName';
 import {UserContext} from '../../context/user';
 import i18n from 'locales';
@@ -27,10 +28,17 @@ const RegisterScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       <View style={styles.viewLogo}>
-        <Image
+        {/* <Image
           source={IMAGES_NAME.REGISTER_LOGO}
           style={styles.imgLogo}
           resizeMode="stretch"
+        /> */}
+        <LottieView
+          source={require('../../assets/json/Register.json')}
+          style={styles.imgLogo}
+          // ref={useLottieAnim()}
+          autoPlay
+          loop
         />
       </View>
       <View style={styles.viewContent}>

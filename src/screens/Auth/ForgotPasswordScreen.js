@@ -12,6 +12,7 @@ import {
 import React, {useState} from 'react';
 
 import CustomHeader from '../../navigators/CustomHeader';
+import LottieView from 'lottie-react-native';
 import SCREEN_NAME from '../../components/ScreenName';
 import auth from '@react-native-firebase/auth';
 import i18n from 'locales';
@@ -48,19 +49,30 @@ const ForgotPasswordScreen = ({navigation}) => {
       <CustomHeader title="ForgotPasswordScreen" navigation={navigation} />
       <View style={styles.viewContent}>
         {/* <Image source={require('../../assets/key.png')} style={styles.Image} /> */}
-        <TextInput
-          style={styles.textInput}
-          placeholder={i18n.t('input_email')}
-          onChangeText={setEmail}
-          value={email}
-          underlineColorAndroid="transparent"
-        />
+        <View style={styles.top_container}>
+          <LottieView
+            source={require('../../assets/json/Forgotpassword.json')}
+            style={styles.imgLogo}
+            // ref={useLottieAnim()}
+            autoPlay
+            loop
+          />
+        </View>
+        <View style={styles.bottom_Container}>
+          <TextInput
+            style={styles.textInput}
+            placeholder={i18n.t('input_email')}
+            onChangeText={setEmail}
+            value={email}
+            underlineColorAndroid="transparent"
+          />
 
-        <TouchableOpacity
-          style={styles.btnLogin}
-          onPress={() => onResetPassword()}>
-          <Text style={styles.textLogin}>{i18n.t('password_recovery')}</Text>
-        </TouchableOpacity>
+          <TouchableOpacity
+            style={styles.btnLogin}
+            onPress={() => onResetPassword()}>
+            <Text style={styles.textLogin}>{i18n.t('password_recovery')}</Text>
+          </TouchableOpacity>
+        </View>
         {showLoading && (
           <View style={styles.activity}>
             <ActivityIndicator size="large" color="#59b18c" />
@@ -77,7 +89,6 @@ const styles = StyleSheet.create({
   },
   viewContent: {
     flex: 1,
-    justifyContent: 'center',
     alignItems: 'center',
   },
   textContent: {
@@ -112,6 +123,16 @@ const styles = StyleSheet.create({
     top: 0,
     bottom: 0,
     alignItems: 'center',
+    justifyContent: 'center',
+  },
+  top_container: {
+    width: WIDTH * 0.6,
+    height: WIDTH * 0.6,
+    marginTop: 20,
+  },
+  bottom_Container: {
+    width: WIDTH,
+    height: HEIGHT / 2,
     justifyContent: 'center',
   },
 });

@@ -6,8 +6,10 @@ export const UserContext = React.createContext();
 
 export const UserProvider = ({children}) => {
   const [user, setUser] = useState(null);
+  const [userId, setUserId] = useState(null);
   const [deviceId, setDeviceId] = useState('');
   const [email, setEmail] = useState('');
+  const [mobile, setMobile] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
 
@@ -23,6 +25,10 @@ export const UserProvider = ({children}) => {
       value={{
         user,
         setUser,
+        userId,
+        setUserId,
+        mobile,
+        setMobile,
         deviceId,
         setDeviceId,
         email,

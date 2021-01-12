@@ -13,11 +13,11 @@ import {
 import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import DeviceInfo from 'react-native-device-info';
-import FirebaseAuth from '../../services/firebaseAuth';
 import IMAGES_NAME from '../../assets/index';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import LottieView from 'lottie-react-native';
+import Modal from 'react-native-modal';
 import SCREEN_NAME from '../../components/ScreenName';
 import {UserContext} from '../../context/user';
 import auth from '@react-native-firebase/auth';
@@ -28,11 +28,26 @@ const LoginScreen = ({navigation}) => {
   const u = useContext(UserContext);
   const [showLoading, setShowLoading] = useState(false);
   const [passwordShown, setPasswordShown] = useState(true);
-  const animation = useRef(null);
+  const [confirm, setConfirm] = useState(null);
+  const [code, setCode] = useState('');
+  const [isModalVisible, setModalVisible] = useState(false);
 
-  const onPress = () => {
-    animation.current.play();
-  };
+  // const useLottieAnim = () => {
+  //   const animation = useRef(null);
+
+  //   useEffect(() => {
+  //     if (animation.current) {
+  //       animation.current.play();
+  //     }
+  //     return () => {
+  //       // eslint-disable-next-line react-hooks/exhaustive-deps
+  //       animation.current && animation.current.reset();
+  //     };
+  //   }, []);
+
+  //   return animation;
+  // };
+
   const CAlert = (title, message) => {
     Alert.alert(title, message, [{text: i18n.t('ok')}], {cancelable: false});
   };
@@ -41,6 +56,45 @@ const LoginScreen = ({navigation}) => {
     setPasswordShown(!passwordShown);
   };
 
+  const signInWithPhoneNumber = async () => {
+    try {
+      const confirmation = await auth().signInWithPhoneNumber(u.mobile);
+      setConfirm(confirmation);
+    } catch (e) {
+      console.log(e.message);
+      // Alert.alert(e.message);
+    }
+  };
+  const validatePhoneNumber = () => {
+    var regexp = /^\+[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/;
+    return regexp.test(u.mobile);
+  };
+  const handleSendCode = () => {
+    // Request to send OTP
+    if (validatePhoneNumber()) {
+      auth()
+        .signInWithPhoneNumber(u.mobile)
+        .then((confirmResult) => {
+          // this.setState({confirmResult});
+          console.log('confirm');
+        })
+        .catch((error) => {
+          alert(error.message);
+
+          console.log(error);
+        });
+    } else {
+      alert('Invalid Phone Number');
+    }
+  };
+
+  async function confirmCode() {
+    try {
+      await confirm.confirm(code);
+    } catch (error) {
+      console.log('Invalid code.');
+    }
+  }
   const goLogin = async () => {
     logLogin(u.deviceId);
     setShowLoading(true);
@@ -59,8 +113,7 @@ const LoginScreen = ({navigation}) => {
         CAlert(i18n.t('error'), i18n.t('email_empty'));
       } else if (e.code === 'auth/invalid-email') {
         CAlert(i18n.t('error'), i18n.t('email_format'));
-      }
-      if (u.password <= 5) {
+      } else if (u.password <= 5) {
         CAlert(i18n.t('error'), i18n.t('password_char_min'));
       } else if (e.code === 'auth/wrong-password') {
         CAlert(i18n.t('error'), i18n.t('password_error'));
@@ -96,7 +149,10 @@ const LoginScreen = ({navigation}) => {
          */}
         <LottieView
           source={require('../../assets/json/Login.json')}
-          ref={animation}
+          style={styles.imgLogo}
+          // ref={useLottieAnim()}
+          autoPlay
+          loop
         />
       </View>
       <View style={styles.viewContent}>
@@ -105,7 +161,7 @@ const LoginScreen = ({navigation}) => {
             style={styles.txtInput}
             maxLength={255}
             keyboardType={'email-address'}
-            onChangeText={u.setEmail}
+            onChangeText={(text) => u.setEmail(text)}
             value={u.email}
             placeholder={i18n.t('email')}
             underlineColorAndroid="transparent"
@@ -150,7 +206,6 @@ const LoginScreen = ({navigation}) => {
             style={styles.btnLogin}
             onPress={() => {
               goLogin();
-              // navigation.navigate(SCREEN_NAME.HOME_COMPONENT);
             }}>
             <Text style={styles.txtButton}>{i18n.t('Login')}</Text>
           </TouchableOpacity>
@@ -158,7 +213,7 @@ const LoginScreen = ({navigation}) => {
           <View style={styles.otherLogin}>
             <TouchableOpacity
               style={styles.touchOther}
-              onPress={() => console.log('login Mobile')}>
+              onPress={() => setModalVisible(true)}>
               <Icon
                 name={
                   Platform.OS === 'ios'
@@ -203,6 +258,37 @@ const LoginScreen = ({navigation}) => {
           </View>
         </View>
       </View>
+      <Modal
+        style={styles.containerModal}
+        isVisible={isModalVisible}
+        backdropOpacity={0.5}
+        animationInTiming={800}
+        animationOutTiming={800}
+        avoidKeyboard={true}
+        onBackdropPress={() => setModalVisible(false)}>
+        <View style={styles.viewModal}>
+          <Text style={styles.txtRegister}>Enter your phone!</Text>
+          <View>
+            <TextInput
+              style={styles.txtInput}
+              maxLength={255}
+              onChangeText={u.setMobile}
+              value={u.mobile}
+              keyboardType="phone-pad"
+              autoCompleteType="tel"
+              placeholder={i18n.t('password')}
+              underlineColorAndroid="transparent"
+            />
+            <TouchableOpacity
+              style={styles.tchModal}
+              onPress={() => {
+                handleSendCode();
+              }}>
+              <Text style={styles.txtButton}>{i18n.t('Login')}</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       {showLoading && (
         <View style={styles.activity}>
           <ActivityIndicator size="large" color="#59b18c" />
@@ -299,6 +385,25 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  containerModal: {
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  viewModal: {
+    backgroundColor: 'white',
+    height: WIDTH * 0.6,
+    width: WIDTH,
+    justifyContent: 'space-around',
+    alignItems: 'center',
+  },
+  tchModal: {
+    height: 50,
+    width: WIDTH - 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'red',
   },
 });
 export default LoginScreen;

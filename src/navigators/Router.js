@@ -29,6 +29,17 @@ import i18n from 'locales';
 
 /**MAIN**/
 const Main = () => {
+  // const [isLoading, setIsLoading] = useState(true);
+  // const u = useContext(UserContext);
+
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setIsLoading(!isLoading);
+  //     u.setUser({});
+  //     console.log(u.user);
+  //   }, 500);
+  // }, []);
+
   if (Text.defaultProps == null) {
     Text.defaultProps = {};
   }
@@ -220,27 +231,29 @@ const Main = () => {
 
   //**Root**/
   const StackRoot = createStackNavigator();
-  const RootStackScreen = ({navigation}) => (
-    <StackRoot.Navigator
-      initialRouteName={SCREEN_NAME.AUTH_SCREEN}
-      screenOptions={{gestureEnabled: false}}>
-      <StackRoot.Screen
-        name={SCREEN_NAME.HOME_COMPONENT}
-        component={DrawerNavigator}
-        options={navOptionHandler}
-      />
-      <StackRoot.Screen
-        name={SCREEN_NAME.NOTIFICATIONS_SCREEN}
-        component={NotificationsScreen}
-        options={navOptionHandler}
-      />
-      <StackRoot.Screen
-        name={SCREEN_NAME.AUTH_SCREEN}
-        component={AuthStackScreen}
-        options={navOptionHandler}
-      />
-    </StackRoot.Navigator>
-  );
+  const RootStackScreen = ({navigation}) => {
+    return (
+      <StackRoot.Navigator
+        initialRouteName={SCREEN_NAME.AUTH_SCREEN}
+        screenOptions={{gestureEnabled: false}}>
+        <StackRoot.Screen
+          name={SCREEN_NAME.HOME_COMPONENT}
+          component={DrawerNavigator}
+          options={navOptionHandler}
+        />
+        <StackRoot.Screen
+          name={SCREEN_NAME.NOTIFICATIONS_SCREEN}
+          component={NotificationsScreen}
+          options={navOptionHandler}
+        />
+        <StackRoot.Screen
+          name={SCREEN_NAME.AUTH_SCREEN}
+          component={AuthStackScreen}
+          options={navOptionHandler}
+        />
+      </StackRoot.Navigator>
+    );
+  };
 
   return (
     <NavigationContainer
@@ -261,6 +274,7 @@ const Main = () => {
         // Save the current route name for later comparison
         routeNameRef.current = currentRouteName;
       }}>
+      {/* {u.user ? <AuthStackScreen /> : <RootStackScreen />} */}
       <RootStackScreen />
     </NavigationContainer>
   );

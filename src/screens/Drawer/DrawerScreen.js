@@ -46,7 +46,7 @@ const DrawerScreen = ({navigation}) => {
             flexDirection: 'row',
             alignItems: 'center',
           }}
-          onPress={() => navigation.navigate(SCREEN_NAME.MENU_TAB)}>
+          onPress={() => navigation.navigate(SCREEN_NAME.HOME_SCREEN)}>
           <Ionicons
             name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
             size={25}
