@@ -10,40 +10,18 @@ import React, {useContext, useEffect, useState} from 'react';
 
 import CustomHeader from '../../navigators/CustomHeader';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import SCREEN_NAME from '../../components/ScreenName';
 import {UserContext} from '../../context/user';
-import auth from '@react-native-firebase/auth';
 import i18n from 'locales';
 import {logGoHome} from '../../services/analytics';
 
 const HomeScreen = ({navigation}) => {
   const u = useContext(UserContext);
-  const [initializing, setInitializing] = useState(true);
 
   useEffect(() => {
     logGoHome(u.deviceId);
   }, [u.deviceId]);
-
-  // const onAuthStateChanged = (user) => {
-  //   u.setUser(user);
-  //   u.setUserId(user.uid);
-  //   if (initializing) {
-  //     setInitializing(false);
-  //   }
-  // };
-
-  // useEffect(() => {
-  //   const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
-  //   return subscriber;
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, []);
-
-  // if (initializing) {
-  //   return null;
-  // }
-
-  // if (!u.user) {
-  //   return navigation.navigate('Login');
-  // }
+  // console.log('user home=========', u?.user);
 
   return (
     <View style={styles.container}>
@@ -55,7 +33,7 @@ const HomeScreen = ({navigation}) => {
       <View style={styles.viewHome}>
         <TouchableOpacity
           style={styles.touchView}
-          onPress={() => navigation.navigate('HomeDetail')}>
+          onPress={() => navigation.navigate(SCREEN_NAME.HOME_DETAIL)}>
           <Text style={styles.textHome}>Home!</Text>
           <Ionicons
             name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
@@ -63,14 +41,16 @@ const HomeScreen = ({navigation}) => {
             color="#5B37B7"
           />
         </TouchableOpacity>
-        {u.user ? (
-          <View>
-            <Text>Email: {u.email}</Text>
-            <Text>UserId: {u.userId}</Text>
-          </View>
-        ) : (
-          <View />
-        )}
+        <View>
+          {u?.user ? (
+            <View>
+              <Text>Email: {u.user.email}</Text>
+              <Text>UserId: {u.user.uid}</Text>
+            </View>
+          ) : (
+            <View />
+          )}
+        </View>
       </View>
     </View>
   );

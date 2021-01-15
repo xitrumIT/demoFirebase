@@ -1,8 +1,8 @@
+import {AccessToken, LoginManager} from 'react-native-fbsdk';
+/* eslint-disable no-catch-shadow */
 import {
-  ActivityIndicator,
   Alert,
   Dimensions,
-  Image,
   Platform,
   StyleSheet,
   Text,
@@ -10,12 +10,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import {GoogleSignin, statusCodes} from '@react-native-community/google-signin';
 import React, {useContext, useEffect, useRef, useState} from 'react';
 
 import DeviceInfo from 'react-native-device-info';
 import IMAGES_NAME from '../../assets/index';
 import Icon from 'react-native-vector-icons/Ionicons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import Loading from '../../components/Loading';
 import LottieView from 'lottie-react-native';
 import Modal from 'react-native-modal';
 import SCREEN_NAME from '../../components/ScreenName';
@@ -28,101 +30,61 @@ const LoginScreen = ({navigation}) => {
   const u = useContext(UserContext);
   const [showLoading, setShowLoading] = useState(false);
   const [passwordShown, setPasswordShown] = useState(true);
-  const [confirm, setConfirm] = useState(null);
-  const [code, setCode] = useState('');
   const [isModalVisible, setModalVisible] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [mobile, setMobile] = useState('');
+  const [code, setCode] = useState('');
+  const [error, setError] = useState(null);
 
-  // const useLottieAnim = () => {
-  //   const animation = useRef(null);
-
-  //   useEffect(() => {
-  //     if (animation.current) {
-  //       animation.current.play();
-  //     }
-  //     return () => {
-  //       // eslint-disable-next-line react-hooks/exhaustive-deps
-  //       animation.current && animation.current.reset();
-  //     };
-  //   }, []);
-
-  //   return animation;
-  // };
-
+  //show alert
   const CAlert = (title, message) => {
     Alert.alert(title, message, [{text: i18n.t('ok')}], {cancelable: false});
   };
-
+  //  show and hide password
   const togglePasswordVisibility = () => {
     setPasswordShown(!passwordShown);
   };
 
-  const signInWithPhoneNumber = async () => {
-    try {
-      const confirmation = await auth().signInWithPhoneNumber(u.mobile);
-      setConfirm(confirmation);
-    } catch (e) {
-      console.log(e.message);
-      // Alert.alert(e.message);
-    }
-  };
-  const validatePhoneNumber = () => {
-    var regexp = /^\+[0-9]?()[0-9](\s|\S)(\d[0-9]{8,16})$/;
-    return regexp.test(u.mobile);
-  };
-  const handleSendCode = () => {
-    // Request to send OTP
-    if (validatePhoneNumber()) {
-      auth()
-        .signInWithPhoneNumber(u.mobile)
-        .then((confirmResult) => {
-          // this.setState({confirmResult});
-          console.log('confirm');
-        })
-        .catch((error) => {
-          alert(error.message);
-
-          console.log(error);
-        });
-    } else {
-      alert('Invalid Phone Number');
-    }
-  };
-
-  async function confirmCode() {
-    try {
-      await confirm.confirm(code);
-    } catch (error) {
-      console.log('Invalid code.');
-    }
-  }
+  //TODO: login with email & password
   const goLogin = async () => {
     logLogin(u.deviceId);
     setShowLoading(true);
     try {
-      const doLogin = await auth().signInWithEmailAndPassword(
-        u.email,
-        u.password,
-      );
-      setShowLoading(false);
+      const doLogin = await auth().signInWithEmailAndPassword(email, password);
+      // setShowLoading(false);
       if (doLogin.user) {
+        console.log('user login with Email ==', doLogin.user);
+        u.setUser(doLogin.user);
+        u.setUserId(doLogin.user.uid);
+        u.setEmail(doLogin.user.email);
         navigation.navigate(SCREEN_NAME.HOME_COMPONENT);
       }
     } catch (e) {
       setShowLoading(false);
-      if (u.email === '') {
+      if (email === '') {
         CAlert(i18n.t('error'), i18n.t('email_empty'));
-      } else if (e.code === 'auth/invalid-email') {
+        return;
+      }
+      if (e.code === 'auth/invalid-email') {
         CAlert(i18n.t('error'), i18n.t('email_format'));
-      } else if (u.password <= 5) {
+        return;
+      }
+      if (password <= 5) {
         CAlert(i18n.t('error'), i18n.t('password_char_min'));
-      } else if (e.code === 'auth/wrong-password') {
+        return;
+      }
+      if (e.code === 'auth/wrong-password') {
         CAlert(i18n.t('error'), i18n.t('password_error'));
+        return;
       }
       if (e.code === 'auth/too-many-requests') {
         CAlert(i18n.t('error'), i18n.t('request_max'));
+        return;
       }
       if (e.code === 'auth/user-not-found') {
         CAlert(i18n.t('error'), i18n.t('user_error'));
+        return;
       }
       console.log(e.message);
       // Alert.alert(e.message);
@@ -142,6 +104,49 @@ const LoginScreen = ({navigation}) => {
     checkSystem();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [u.deviceID]);
+
+  //TODO: Login with Google
+  const loginGoogle = async () => {
+    setShowLoading(true);
+    try {
+      await GoogleSignin.hasPlayServices();
+      const {accessToken, idToken} = await GoogleSignin.signIn();
+      const credential = auth.GoogleAuthProvider.credential(
+        idToken,
+        accessToken,
+      );
+      await auth().signInWithCredential(credential);
+      console.log('user login with GG ==', credential);
+    } catch (e) {
+      setShowLoading(false);
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // when user cancels sign in process,
+        Alert.alert('Process Cancelled');
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // when in progress already
+        Alert.alert('Process in progress');
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // when play services not available
+        Alert.alert('Play services are not available');
+      } else {
+        // some other error
+        Alert.alert('Something else went wrong... ', error.toString());
+        setError(error);
+      }
+    }
+  };
+  useEffect(() => {
+    GoogleSignin.configure({
+      scopes: ['https://www.googleapis.com/auth/drive.readonly'], // what API you want to access on behalf of the user, default is email and profile
+      webClientId:
+        '752285686539-rdplf4ij24crn2pfjjmdgglajg931b5o.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+      offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  //TODO: Login with Facebook
+  const loginFacebook = () => {};
   return (
     <View style={styles.container}>
       <View style={styles.viewLogo}>
@@ -161,8 +166,8 @@ const LoginScreen = ({navigation}) => {
             style={styles.txtInput}
             maxLength={255}
             keyboardType={'email-address'}
-            onChangeText={(text) => u.setEmail(text)}
-            value={u.email}
+            onChangeText={(text) => setEmail(text)}
+            value={email}
             placeholder={i18n.t('email')}
             underlineColorAndroid="transparent"
           />
@@ -170,8 +175,8 @@ const LoginScreen = ({navigation}) => {
             <TextInput
               style={styles.txtInput}
               maxLength={255}
-              onChangeText={u.setPassword}
-              value={u.password}
+              onChangeText={(text) => setPassword(text)}
+              value={password}
               placeholder={i18n.t('password')}
               underlineColorAndroid="transparent"
               secureTextEntry={passwordShown}
@@ -226,7 +231,7 @@ const LoginScreen = ({navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.touchOther}
-              onPress={() => console.log('login Google')}>
+              onPress={() => loginGoogle()}>
               <Icon
                 name={
                   Platform.OS === 'ios' ? 'ios-logo-google' : 'md-logo-google'
@@ -272,8 +277,8 @@ const LoginScreen = ({navigation}) => {
             <TextInput
               style={styles.txtInput}
               maxLength={255}
-              onChangeText={u.setMobile}
-              value={u.mobile}
+              onChangeText={setMobile}
+              value={mobile}
               keyboardType="phone-pad"
               autoCompleteType="tel"
               placeholder={i18n.t('password')}
@@ -282,7 +287,7 @@ const LoginScreen = ({navigation}) => {
             <TouchableOpacity
               style={styles.tchModal}
               onPress={() => {
-                handleSendCode();
+                // handleSendCode();
               }}>
               <Text style={styles.txtButton}>{i18n.t('Login')}</Text>
             </TouchableOpacity>
@@ -291,7 +296,7 @@ const LoginScreen = ({navigation}) => {
       </Modal>
       {showLoading && (
         <View style={styles.activity}>
-          <ActivityIndicator size="large" color="#59b18c" />
+          <Loading />
         </View>
       )}
     </View>

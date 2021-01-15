@@ -702,7 +702,7 @@ PODS:
     - React
   - RNDeviceInfo (7.3.1):
     - React-Core
-  - RNFBAnalytics (10.3.1):
+  - RNFBAnalytics (10.4.1):
     - Firebase/Analytics (~> 7.3.0)
     - React-Core
     - RNFBApp
@@ -723,9 +723,9 @@ PODS:
     - RNFBApp
   - RNGestureHandler (1.9.0):
     - React-Core
-  - RNGoogleSignin (4.0.3):
+  - RNGoogleSignin (5.0.0):
     - GoogleSignIn (~> 5.0.0)
-    - React
+    - React-Core
   - RNReanimated (1.13.2):
     - React-Core
   - RNScreens (2.16.1):
@@ -1017,13 +1017,13 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: b03032fdbdb725bea0bd9e5ec5a7272865ae7398
   RNCMaskedView: 5a8ec07677aa885546a0d98da336457e2bea557f
   RNDeviceInfo: 6ecb1d1c87d20e4c62354be0348de23362824dcd
-  RNFBAnalytics: 2fb60eedb8cead61797417cc7c33f087ce78e6c3
+  RNFBAnalytics: a274c45ca741e12d1bdb3e0b8465dffc06a8d1b8
   RNFBApp: a9af8372c9c2b2135ffa78817fd2d8baf3ee632e
   RNFBAuth: 45d680dd8f6648927517c6ba1eb9cbef657296d5
   RNFBFirestore: 0b8011f328214e0cf4fce1a92d3339d4b464fe92
   RNFBMessaging: e46490776fcde23b1dee602008a85ac0874c4c0f
   RNGestureHandler: 9b7e605a741412e20e13c512738a31bd1611759b
-  RNGoogleSignin: ccf71ee4b6cfd324fd788a41e457e2043838c0d9
+  RNGoogleSignin: ad866d4c4af2651e36801dd3b7771d7715353499
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNScreens: 45c457af3d2ee9e08fc01e70da87e653d46b1198
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e

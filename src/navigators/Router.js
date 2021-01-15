@@ -1,4 +1,4 @@
-import {ActivityIndictor, Platform, Text} from 'react-native';
+import {ActivityIndictor, Alert, Platform, Text} from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 import {navigationRef, routeNameRef} from './NavigationServiceV5';
 
@@ -29,16 +29,31 @@ import i18n from 'locales';
 
 /**MAIN**/
 const Main = () => {
-  // const [isLoading, setIsLoading] = useState(true);
-  // const u = useContext(UserContext);
+  const [loading, setLoading] = useState(true);
+  const [initializing, setInitializing] = useState(true);
+  const [user, setUser] = useState(null);
+  const u = useContext(UserContext);
 
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     setIsLoading(!isLoading);
-  //     u.setUser({});
-  //     console.log(u.user);
-  //   }, 500);
-  // }, []);
+  function onAuthStateChanged(user) {
+    setUser(user);
+    u.setUser(user);
+    console.log('user Router', user);
+  }
+
+  // if (initializing) {
+  //   setInitializing(false);
+  //   setLoading(false);
+  // }
+  useEffect(() => {
+    const subscriber = auth().onAuthStateChanged(onAuthStateChanged);
+    return subscriber; // unsubscribe on unmount
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   if (Text.defaultProps == null) {
     Text.defaultProps = {};
@@ -234,7 +249,7 @@ const Main = () => {
   const RootStackScreen = ({navigation}) => {
     return (
       <StackRoot.Navigator
-        initialRouteName={SCREEN_NAME.AUTH_SCREEN}
+        initialRouteName={SCREEN_NAME.HOME_COMPONENT}
         screenOptions={{gestureEnabled: false}}>
         <StackRoot.Screen
           name={SCREEN_NAME.HOME_COMPONENT}
@@ -246,11 +261,11 @@ const Main = () => {
           component={NotificationsScreen}
           options={navOptionHandler}
         />
-        <StackRoot.Screen
+        {/* <StackRoot.Screen
           name={SCREEN_NAME.AUTH_SCREEN}
           component={AuthStackScreen}
           options={navOptionHandler}
-        />
+        /> */}
       </StackRoot.Navigator>
     );
   };
@@ -274,8 +289,8 @@ const Main = () => {
         // Save the current route name for later comparison
         routeNameRef.current = currentRouteName;
       }}>
-      {/* {u.user ? <AuthStackScreen /> : <RootStackScreen />} */}
-      <RootStackScreen />
+      {user === null ? <AuthStackScreen /> : <RootStackScreen />}
+      {/* <RootStackScreen /> */}
     </NavigationContainer>
   );
 };

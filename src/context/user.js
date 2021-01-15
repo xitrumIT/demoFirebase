@@ -7,11 +7,11 @@ export const UserContext = React.createContext();
 export const UserProvider = ({children}) => {
   const [user, setUser] = useState(null);
   const [userId, setUserId] = useState(null);
+  const [token, setToken] = useState(null);
   const [deviceId, setDeviceId] = useState('');
+
   const [email, setEmail] = useState('');
   const [mobile, setMobile] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordConfirm, setPasswordConfirm] = useState('');
 
   const logout = async () => {
     try {
@@ -33,10 +33,7 @@ export const UserProvider = ({children}) => {
         setDeviceId,
         email,
         setEmail,
-        password,
-        setPassword,
-        passwordConfirm,
-        setPasswordConfirm,
+
         logout,
       }}>
       {children}

@@ -23,7 +23,7 @@ const DrawerScreen = ({navigation}) => {
   const goLogout = async () => {
     try {
       await auth().signOut();
-      navigation.navigate(SCREEN_NAME.LOGIN_SCREEN);
+      // navigation.navigate(SCREEN_NAME.LOGIN_SCREEN);
     } catch (e) {
       console.error(e);
     }

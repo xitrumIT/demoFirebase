@@ -13,6 +13,7 @@ import com.facebook.soloader.SoLoader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 import com.airbnb.android.react.lottie.LottiePackage;
+import co.apptailor.googlesignin.RNGoogleSigninPackage;
 
 public class MainApplication extends MultiDexApplication implements ReactApplication {
 
@@ -30,6 +31,7 @@ public class MainApplication extends MultiDexApplication implements ReactApplica
           // Packages that cannot be autolinked yet can be added manually here, for example:
           // packages.add(new MyReactNativePackage());
           packages.add(new LottiePackage());
+          new RNGoogleSigninPackage();
           return packages;
         }
 

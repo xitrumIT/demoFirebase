@@ -1,38 +1,79 @@
 import {
+  Alert,
   Dimensions,
   Image,
+  Keyboard,
+  KeyboardAvoidingView,
   Platform,
   StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
 import React, {useContext, useEffect, useState} from 'react';
 
 import IMAGES_NAME from '../../assets/index';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {KeyboardAwareScrollView} from '@codler/react-native-keyboard-aware-scroll-view';
 import LottieView from 'lottie-react-native';
 import SCREEN_NAME from '../../components/ScreenName';
 import {UserContext} from '../../context/user';
+import auth from '@react-native-firebase/auth';
 import i18n from 'locales';
 
 const RegisterScreen = ({navigation}) => {
   const u = useContext(UserContext);
   const [passwordShown, setPasswordShown] = useState(true);
-  const {register} = useContext(UserContext);
+  const [showLoading, setShowLoading] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
 
+  const CAlert = (title, message) => {
+    Alert.alert(
+      title,
+      message,
+      [{text: i18n.t('ok'), onPress: () => navigation.navigate('Login')}],
+      {cancelable: false},
+    );
+  };
   const togglePasswordVisibility = () => {
+    setShowLoading(true);
     setPasswordShown(!passwordShown);
   };
+  const register = async () => {
+    setShowLoading(true);
+    try {
+      const doRegister = await auth().createUserWithEmailAndPassword(
+        email,
+        password,
+      );
+      setShowLoading(false);
+      if (doRegister.user) {
+        CAlert(i18n.t('ok'), i18n.t('register_success'));
+        navigation.navigate(SCREEN_NAME.LOGIN_SCREEN);
+      }
+    } catch (error) {
+      setShowLoading(false);
+      if (error.code === 'auth/email-already-in-use') {
+        console.log('That email address is already in use!');
+      }
+
+      if (error.code === 'auth/invalid-email') {
+        console.log('That email address is invalid!');
+      }
+
+      console.error(error);
+    }
+  };
+
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
       <View style={styles.viewLogo}>
-        {/* <Image
-          source={IMAGES_NAME.REGISTER_LOGO}
-          style={styles.imgLogo}
-          resizeMode="stretch"
-        /> */}
         <LottieView
           source={require('../../assets/json/Register.json')}
           style={styles.imgLogo}
@@ -44,20 +85,20 @@ const RegisterScreen = ({navigation}) => {
       <View style={styles.viewContent}>
         <View>
           <TextInput
-            value={u.email}
+            value={email}
             style={styles.txtInput}
             maxLength={255}
             keyboardType={'email-address'}
-            onChangeText={(text) => u.setEmail(text)}
+            onChangeText={(text) => setEmail(text)}
             placeholder={i18n.t('email')}
             underlineColorAndroid="transparent"
           />
           <View>
             <TextInput
-              value={u.password}
+              value={password}
               style={styles.txtInput}
               maxLength={255}
-              onChangeText={(text) => u.setPassword(text)}
+              onChangeText={(text) => setPassword(text)}
               placeholder={i18n.t('password')}
               underlineColorAndroid="transparent"
               secureTextEntry={passwordShown}
@@ -81,10 +122,10 @@ const RegisterScreen = ({navigation}) => {
           </View>
           <View>
             <TextInput
-              value={u.passwordConfirm}
+              value={passwordConfirm}
               style={styles.txtInput}
               maxLength={255}
-              onChangeText={(text) => u.setPasswordConfirm(text)}
+              onChangeText={(text) => setPasswordConfirm(text)}
               placeholder={i18n.t('password_confirm')}
               underlineColorAndroid="transparent"
               secureTextEntry={passwordShown}
@@ -112,8 +153,8 @@ const RegisterScreen = ({navigation}) => {
           <TouchableOpacity
             style={styles.btnLogin}
             onPress={() => {
-              register(u.email, u.password);
-              navigation.navigate(SCREEN_NAME.HOME_COMPONENT);
+              register(email, password);
+              // navigation.navigate(SCREEN_NAME.HOME_COMPONENT);
             }}>
             <Text style={styles.txtButton}>{i18n.t('Register')}</Text>
           </TouchableOpacity>
@@ -126,7 +167,7 @@ const RegisterScreen = ({navigation}) => {
           </View>
         </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 const {width: WIDTH, height: HEIGHT} = Dimensions.get('window');
