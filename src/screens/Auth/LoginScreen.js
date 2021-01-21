@@ -116,7 +116,6 @@ const LoginScreen = ({navigation}) => {
         accessToken,
       );
       await auth().signInWithCredential(credential);
-      console.log('user login with GG ==', credential);
     } catch (e) {
       setShowLoading(false);
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
@@ -146,7 +145,33 @@ const LoginScreen = ({navigation}) => {
   }, []);
 
   //TODO: Login with Facebook
-  const loginFacebook = () => {};
+  const loginFacebook = async () => {
+    // Attempt login with permissions
+    const result = await LoginManager.logInWithPermissions([
+      'public_profile',
+      'email',
+    ]);
+
+    if (result.isCancelled) {
+      throw 'User cancelled the login process';
+    }
+
+    // Once signed in, get the users AccesToken
+    const data = await AccessToken.getCurrentAccessToken();
+
+    if (!data) {
+      throw 'Something went wrong obtaining access token';
+    }
+
+    // Create a Firebase credential with the AccessToken
+    const facebookCredential = auth.FacebookAuthProvider.credential(
+      data.accessToken,
+    );
+
+    // Sign-in the user with the credential
+    return auth().signInWithCredential(facebookCredential);
+  };
+
   return (
     <View style={styles.container}>
       <View style={styles.viewLogo}>
@@ -242,7 +267,7 @@ const LoginScreen = ({navigation}) => {
             </TouchableOpacity>
             <TouchableOpacity
               style={styles.touchOther}
-              onPress={() => console.log('login Facebook')}>
+              onPress={() => loginFacebook()}>
               <Icon
                 name={
                   Platform.OS === 'ios'

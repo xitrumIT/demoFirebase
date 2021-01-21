@@ -17,7 +17,7 @@ import {logGoHome} from '../../services/analytics';
 
 const HomeScreen = ({navigation}) => {
   const u = useContext(UserContext);
-
+  console.log('Home user', u.user);
   useEffect(() => {
     logGoHome(u.deviceId);
   }, [u.deviceId]);

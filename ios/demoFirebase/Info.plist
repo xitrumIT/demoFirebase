@@ -28,8 +28,20 @@
 			<key>CFBundleURLSchemes</key>
 			<array>
 				<string>com.googleusercontent.apps.752285686539-gj9t7p73ern06sqm9vuls4rrfttvuvmo</string>
+				<string>fb389610115698466</string>
 			</array>
 		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>389610115698466</string>
+	<key>FacebookDisplayName</key>
+	<string>demoFirebase</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+  		<string>fbapi</string>
+  		<string>fb-messenger-share-api</string>
+  		<string>fbauth2</string>
+  		<string>fbshareextension</string>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1</string>

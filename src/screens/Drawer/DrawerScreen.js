@@ -19,7 +19,8 @@ import auth from '@react-native-firebase/auth';
 
 const DrawerScreen = ({navigation}) => {
   const u = useContext(UserContext);
-
+  // const UrlImage = u.user.photoURL;
+  // console.log('url', u.user.photoURL);
   const goLogout = async () => {
     try {
       await auth().signOut();
@@ -33,10 +34,21 @@ const DrawerScreen = ({navigation}) => {
       <ImageBackground
         source={IMAGES_NAME.BGR_AVT}
         style={{height: 150, alignItems: 'center', justifyContent: 'center'}}>
-        <Image
-          source={IMAGES_NAME.AVATAR_VN}
+        {/* <Image
+          source={{uri: UrlImage}}
           style={{height: 130, width: 130, borderRadius: 60}}
-        />
+        /> */}
+        {u.user ? (
+          <Image
+            source={{uri: u.user.photoURL}}
+            style={{height: 130, width: 130, borderRadius: 60}}
+          />
+        ) : (
+          <Image
+            source={IMAGES_NAME.AVATAR_VN}
+            style={{height: 130, width: 130, borderRadius: 60}}
+          />
+        )}
       </ImageBackground>
 
       <ScrollView style={{marginLeft: 5}}>

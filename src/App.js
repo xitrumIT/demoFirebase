@@ -1,10 +1,14 @@
+import React, {useEffect} from 'react';
 import {SafeAreaView, StyleSheet} from 'react-native';
 
 import AppContainer from './navigators/AppContainer';
-import React from 'react';
+import SplashScreen from 'react-native-splash-screen';
 import {UserProvider} from './context/user';
 
 const App = () => {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   return (
     <SafeAreaView style={styles.container}>
       <UserProvider>
